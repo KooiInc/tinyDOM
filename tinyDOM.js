@@ -101,7 +101,6 @@ function maybe({trial, whenError = err => console.log(err)} = {}) {
     if (trial?.constructor !== Function) {
       throw new TypeError(`maybe: trial parameter not a Function or Lambda`);
     }
-    
     return trial();
   } catch (err) {
     return whenError?.constructor === Function ? whenError(err) : console.error(err);
@@ -112,6 +111,8 @@ function containsHTML(str) {
   return str.constructor === String && /<.*>/.test(str);
 }
 
+// Poor man's client side cleanup.
+// You should implement a server side sanitizer!
 function allowed(...values) {
   return values.filter(v =>
     v.toLowerCase().startsWith(`on`) ||
