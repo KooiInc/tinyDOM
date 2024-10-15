@@ -7,23 +7,23 @@ const [tags, $, $$] = [
 export { tags as default, $, $$ };
 
 function tagFactory() {
-  const tagStore = {};
   const tinyDOMProxyGetter = {
     get(obj, key) {
-      const inStore = key.toLowerCase() in tagStore;
+      const tag = key.toLowerCase();
+      const inStore = tag in obj;
       const maybeElement =  inStore || 
-        document.createElement(key?.toLowerCase()) instanceof HTMLElement;
+        document.createElement(tag) instanceof HTMLElement;
       
       if (maybeElement) {
-        if (!inStore) { tagStore[key.toLowerCase()] = tag2FN(key); }
-        return tagStore[key.toLowerCase()];
+        if (!inStore) { obj[tag] = tag2FN(key); }
+        return obj[tag];
       }
 
       return obj[key];
     }
   };
 
-  return new Proxy(tagStore, tinyDOMProxyGetter);
+  return new Proxy({}, tinyDOMProxyGetter);
 }
 
 function tag2FN(tag) {
