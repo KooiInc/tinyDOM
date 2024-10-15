@@ -11,14 +11,12 @@ function demo() {
   });
   const topLink = A({
     target: "_top",
-    href: "https://stackblitz.com/@KooiInc",
-    text: "All projects"
+    href: "https://github.com/KooiInc/tinyDOM",
+    text: "Back to repository"
   });
   
   const detailsContent = DIV(
     DIV("This library offers an alternative for the ", link2Repo, " library."),
-    DIV("Check the code in this project for examples (",
-      CODE({text: "index.js"}), " or click '<i>the code for the above</i>' below)."),
     DIV("Basically the same idea, but a bit more versatile. Address className as ",
       CODE("{class: ...}"), ", data-attributes as ",
       CODE("{data: {one: '...', ...} }"), " and innerHTML/textContent as",
