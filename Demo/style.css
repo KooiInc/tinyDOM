@@ -1,81 +1,87 @@
 /* Note: stackblitz syntax highlighting can't cope with nested style rules */
-body {
-  margin: 2rem;
-  font: 14px/14px system-ui, verdana, arial, sans-serif;
+  .container {
+    font: 14px/14px system-ui, verdana, arial, sans-serif;
+    position: absolute;
+    inset: 0;
 
-  & [data-name]:after {
-    content: 'Hello there 'attr(data-name);
-  }
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
 
-  details {
-    padding: 0.6rem 0;
-    max-width: 80vw;
-    
-    div {
-      margin: 0.8rem 0;
-    }
+      & [data-name]:after {
+        content: 'Hello there 'attr(data-name);
+      }
 
-    & summary {
-      cursor: pointer;
+      & details {
+        padding: 0.6rem 0;
+        max-width: 80vw;
 
-      span {
-        display: inline-block;
-        max-width: 75vw;
-        padding: 5px;
+        div {
+          margin: 0.8rem 0;
+        }
+
+        & summary {
+          cursor: pointer;
+
+          span {
+            display: inline-block;
+            max-width: 75vw;
+            padding: 5px;
+            background-color: hsl(210, 8%, 90%);
+            color: hsl(210, 8%, 5%);
+            font-weight: 500;
+
+            &:hover {
+              text-decoration: underline dotted;
+            }
+          }
+        }
+      }
+
+      & a {
+        &[target] {
+          display: inline-block;
+          text-decoration: none;
+          color: rgba(0, 0, 238, 0.7);
+          font-weight: bold;
+          display: inline-block;
+        }
+
+        &[target]:before {
+          padding-right: 0.3rem
+        }
+
+        &[target]:hover:before {
+          color: red !important;
+        }
+
+        &[target="_blank"]:before {
+          content: "↗";
+        }
+
+        &[target="_top"]:before {
+          content: "↺";
+        }
+      }
+
+      #NameDiv {
+        h3 {
+          margin: 0.5rem 0;
+        }
+
+        border: 1px solid green;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      code:not(.language-javascript) {
         background-color: hsl(210, 8%, 90%);
         color: hsl(210, 8%, 5%);
-        font-weight: 500;
-
-        &:hover {
-          text-decoration: underline dotted;
-        }
+        padding: 2px 4px;
+        display: inline-block;
+        border-radius: 4px;
+        margin: 1px 0;
       }
     }
   }
-
-  a {
-    &[target] {
-      display: inline-block;
-      text-decoration: none;
-      color: rgba(0, 0, 238, 0.7);
-      font-weight: bold;
-      display: inline-block;
-    }
-
-    &[target]:before {
-      padding-right: 0.3rem
-    }
-
-    &[target]:hover:before {
-      color: red !important;
-    }
-
-    &[target="_blank"]:before {
-      content: "↗";
-    }
-
-    &[target="_top"]:before {
-      content: "↺";
-    }
-  }
-
-  #NameDiv {
-    max-width: 77.5vw;
-    h3 {
-      margin: 0.5rem 0;
-    }
-
-    border: 1px solid green;
-    padding: 1rem;
-    text-align: center;
-  }
-
-  code:not(.language-javascript) {
-    background-color: hsl(210, 8%, 90%);
-    color: hsl(210, 8%, 5%);
-    padding: 2px 4px;
-    display: inline-block;
-    border-radius: 4px;
-    margin: 1px 0;
-  }
-}
