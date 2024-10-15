@@ -1,6 +1,6 @@
 # tinyDOM
 
-## Create elements using the element name as a function
+**Create elements using the element name as a function**
 
 This library offers an alternative for the [The TinyJS repository](https://github.com/victorqribeiro/TinyJS) library.
 
