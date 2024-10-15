@@ -17,7 +17,6 @@ body {
 
     & summary {
       cursor: pointer;
-      opacity: 1 !important;
 
       span {
         display: inline-block;
@@ -25,6 +24,8 @@ body {
         padding: 5px;
         background-color: hsl(210, 8%, 90%);
         color: hsl(210, 8%, 5%);
+        font-weight: 500;
+
         &:hover {
           text-decoration: underline dotted;
         }
