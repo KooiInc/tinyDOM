@@ -1,7 +1,4 @@
-import "./style.css";
-import "./prism.css";
-import "./prism.js";
-import { default as $T, $} from "./tinyDOM.js";
+import { default as $T, $} from "../tinyDOM.js";
 
 const {H3, DIV, A, CODE, DETAILS, SUMMARY} = $T;
 const link2Repo = A({
@@ -31,14 +28,14 @@ const detailsContent = DIV(
 
 $("body").append(
   topLink,
-  DETAILS( SUMMARY( { text: "About" } ), detailsContent ),
+  DETAILS( {open: true}, SUMMARY( "<span>About</span>" ), detailsContent ),
   DIV( { id: "NameDiv" },  H3({ data: { name: "Mary POC Demo"} }), $T.p( "How are <i><b>you</b></i> today?" ) ),
 );
 
 // code
 document.body.append(
-  DETAILS({open: true},
-    SUMMARY(`The code for the above`),
+  DETAILS(
+    SUMMARY(`<span>The code for the above</span>`),
     $T.pre({class: `language-javascript line-numbers`},
       CODE({class: `language-javascript`,
         text: `const {H3, DIV, A, CODE, DETAILS, SUMMARY} = $T;
@@ -68,7 +65,7 @@ const detailsContent = DIV(
 
 $("body").append(
   topLink,
-  DETAILS( SUMMARY( { text: "About" } ), detailsContent ),
+  DETAILS( SUMMARY( "<span>About</span>" ), detailsContent ),
   DIV( { id: "NameDiv" },
     H3({ data: { name: "Mary POC Demo" } }), 
     $T.p( "How are <i><b>you</b></i> today?" ) ),

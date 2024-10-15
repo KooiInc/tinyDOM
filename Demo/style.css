@@ -9,7 +9,7 @@ body {
 
   details {
     padding: 0.6rem 0;
-    max-width: 90vw;
+    max-width: 80vw;
     
     div {
       margin: 0.8rem 0;
@@ -19,8 +19,15 @@ body {
       cursor: pointer;
       opacity: 1 !important;
 
-      &:hover {
-        text-decoration: underline dotted;
+      span {
+        display: inline-block;
+        max-width: 75vw;
+        padding: 5px;
+        background-color: hsl(210, 8%, 90%);
+        color: hsl(210, 8%, 5%);
+        &:hover {
+          text-decoration: underline dotted;
+        }
       }
     }
   }
@@ -52,6 +59,7 @@ body {
   }
 
   #NameDiv {
+    max-width: 80vw;
     h3 {
       margin: 0.5rem 0;
     }
