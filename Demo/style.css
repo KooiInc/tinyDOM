@@ -1,0 +1,72 @@
+/* Note: stackblitz syntax highlighting can't cope with nested style rules */
+body {
+  margin: 2rem;
+  font: 14px/14px system-ui, verdana, arial, sans-serif;
+
+  & [data-name]:after {
+    content: 'Hello there 'attr(data-name);
+  }
+
+  details {
+    padding: 0.6rem 0;
+    max-width: 90vw;
+    
+    div {
+      margin: 0.8rem 0;
+    }
+
+    & summary {
+      cursor: pointer;
+      opacity: 1 !important;
+
+      &:hover {
+        text-decoration: underline dotted;
+      }
+    }
+  }
+
+  a {
+    &[target] {
+      display: inline-block;
+      text-decoration: none;
+      color: rgba(0, 0, 238, 0.7);
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    &[target]:before {
+      padding-right: 0.3rem
+    }
+
+    &[target]:hover:before {
+      color: red !important;
+    }
+
+    &[target="_blank"]:before {
+      content: "↗";
+    }
+
+    &[target="_top"]:before {
+      content: "↺";
+    }
+  }
+
+  #NameDiv {
+    h3 {
+      margin: 0.5rem 0;
+    }
+
+    border: 1px solid green;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  code:not(.language-javascript) {
+    background-color: hsl(210, 8%, 90%);
+    color: hsl(210, 8%, 5%);
+    padding: 2px 4px;
+    display: inline-block;
+    border-radius: 4px;
+    margin: 1px 0;
+  }
+}
