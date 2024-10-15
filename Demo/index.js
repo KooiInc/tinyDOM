@@ -48,7 +48,7 @@ function createCodeDetails() {
       $T.pre({class: `language-javascript line-numbers`},
         $T.code({
           class: `language-javascript`,
-          text: demoCode.slice(demoCode.indexOf(`\/\/`), -1).replace(/\n {2}/g, `\n`) } ) ) )
+          text: demoCode.slice(demoCode.indexOf(`\/\/`), -2).replace(/\n {2}/g, `\n`) } ) ) )
   );
   Prism.highlightAll();
 }
