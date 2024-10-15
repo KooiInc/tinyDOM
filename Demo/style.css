@@ -8,10 +8,6 @@
     margin: 0 auto;
     padding: 2rem;
 
-    &[data-name]:after {
-      content: 'Hello there ' attr(data-name);
-    }
-
     details {
       padding: 0.6rem 0;
       max-width: 80vw;
@@ -67,6 +63,15 @@
     #NameDiv {
       h3 {
         margin: 0.5rem 0;
+      }
+
+      h3[data-name]:before {
+        content: 'Hello there ';
+      }
+
+      h3[data-name]:after {
+        content: "'"attr(data-name)"'";
+        font-style: italic;
       }
 
       border: 1px solid green;
