@@ -28,21 +28,7 @@ function tagFactory() {
 
 function tag2FN(tag) {
   return function(initial, ...args) {
-    let elem;
-
-    if (initial.constructor === String) {
-      const maybeHtml = containsHTML(initial);
-      elem = createElement(tag, maybeHtml ? {html: initial} : {text: initial});
-    }
-
-    if (initial instanceof HTMLElement) {
-      elem = createElement(tag);
-      elem.append(initial);
-    }
-
-    if (!elem) {
-      elem = createElement(tag, initial);
-    }
+    const elem = retrieveElementFromInitial(initial, tag);
 
     if (args.length) {
       args.forEach(arg => {
@@ -58,33 +44,38 @@ function tag2FN(tag) {
   }
 }
 
+function retrieveElementFromInitial(initial, tag) {
+  switch(true) {
+    case initial.constructor === String:
+      return createElement(tag, containsHTML(initial)
+        ? {html: initial} : {text: initial});
+    case initial instanceof HTMLElement:
+      const elem = createElement(tag);
+      elem.append(initial);
+      return elem;
+    default:
+      return createElement(tag, initial);
+  }
+}
+
+function cleanupProps(props) {
+  if (props.class) { props.className = props.class; }
+  if (props.html) { props.innerHTML = props.html; }
+  if (props.text) { props.textContent = props.text; }
+  
+  delete props.data;
+  delete props.class;
+  delete props.html;
+  delete props.text;
+  
+  return Object.fromEntries(
+    Object.entries(props).filter( ([key, value]) =>
+      allowed(key.trim(), `${value}`.trim()) ) );
+}
+
 function createElement(name, props = {}) {
   const data = Object.entries(structuredClone(props?.data || {}));
-  
-  if (props?.data) {
-     delete props.data;
-  }
-
-  if (props?.class) {
-    props.className = props.class;
-    delete props.class;
-  }
-  
-  if (props?.html) {
-    props.innerHTML = props.html;
-    delete props.html;
-  }
-  
-  if (props?.text) {
-    props.textContent = props.text;
-    delete props.text;
-  }
-
-  props = Object.fromEntries(
-    Object.entries(props)
-      .filter( ([key, value]) => 
-        allowed(key.trim(), `${value}`.trim()) ) );
-
+  props = cleanupProps(props);
   const elem = Object.assign(document.createElement(name), props);
   
   if (data.length) {
