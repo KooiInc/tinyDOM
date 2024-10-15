@@ -3,6 +3,9 @@ demo();
 createCodeDetails();
 
 function demo() {
+  // imported with
+  // import { default as $T, $} from "../tinyDOM.js";
+  // ------------------------------------------------
   const {H3, DIV, A, CODE, DETAILS, SUMMARY} = $T;
   const link2Repo = A({
     href: "https://github.com/victorqribeiro/TinyJS",
@@ -45,7 +48,7 @@ function createCodeDetails() {
       $T.pre({class: `language-javascript line-numbers`},
         $T.code({
           class: `language-javascript`,
-          text: demoCode.slice(demoCode.indexOf(`const`), -1).replace(/\n  /g, `\n`) } ) ) )
+          text: demoCode.slice(demoCode.indexOf(`\/\/`), -1).replace(/\n  /g, `\n`) } ) ) )
   );
   Prism.highlightAll();
 }

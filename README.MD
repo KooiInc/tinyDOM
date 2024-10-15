@@ -8,7 +8,7 @@ or `tags.P({class: "helloworld", data: {world: " World"}}, "Hello")`.
 
 Basically the same idea, but a bit more versatile. 
 Address className as `{class: ...}`, data-attributes as `{data: {one: '...', ...}` and innerHTML/textContent 
-as `{text: ...}</code> or <code>{html: ...}`.
+as `{text: ...}` or `{html: ...}`.
 
 Furthermore, the tags can be used *case insensitive* (e.g. `const {h3, H3, DIV, p, P} = tags`), and some 
 attributes/properties considered *evil* are prohibited.
