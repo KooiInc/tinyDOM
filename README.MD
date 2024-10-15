@@ -8,7 +8,7 @@ or `tags.P({class: "helloworld", data: {world: " World"}}, "Hello")`.
 
 It use basically the same idea, but a bit more versatile.
 
-- The library uses a `Proxy`, so the elements are lazy loaded (on demand).
+- The library uses a `Proxy`, so the element functions are lazy loaded (on demand).
 - address the `className` property as `{class: ...}`
 - address `data-attributes` as `{data: {one: '...', ...}`
 - address `innerHTML/textContent` as `{html: ...}` or `{text: ...}`.
