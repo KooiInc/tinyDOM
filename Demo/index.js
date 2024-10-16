@@ -33,8 +33,8 @@ function demo() {
       ),
       DIV("A tag function is <i>case insensitive</i> (so ",
         CODE("tags.DIV"), " / ", CODE("tags.div"), " are equal)."),
-      DIV("The properties for a HTML element, e.g. (",
-        CODE("class"), " or ", CODE("id"), ") can be given as an object in the\
+      DIV("The properties for a HTML element, e.g. ",
+        CODE("class"), " or ", CODE("id"), " can be given as an object in the\
           first argument. Everything from the next argument(s) is nested\
           within the created element. It may be strings or other HTML elements.\
           Strings may contain html."),
