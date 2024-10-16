@@ -1,4 +1,10 @@
 import { default as $T, $} from "../tinyDOM.js";
+document.addEventListener("click", evt => {
+  if (evt.target.dataset?.action === `revealCode`) {
+    return $(`#code`).open = true;
+  }
+});
+const withHtml = 'Hello &lt;i>world &lt;/i>';
 demo();
 createCodeDetails();
 
@@ -18,26 +24,37 @@ function demo() {
     text: "Back to repository"
   });
   
-  const detailsContent =
+  const aboutContent =
     DIV(
-      DIV("This library offers an alternative for the ", link2Repo, " library."),
-      DIV("Basically the same idea, but a bit more versatile. Address className as ",
-        CODE("{class: ...}"), ", data-attributes as ",
-        CODE("{data: {one: '...', ...} }"), " and innerHTML/textContent as",
-        CODE("{text: ...}"), " or ", CODE("{html: ...}"), "."),
-      DIV("Furthermore, the tags can be used <i>case insensitive</i> (e.g. ",
-        CODE("const {h3, H3, DIV, p, P} = $T"),
-        "), and some attributes/properties considered <i>evil</i> are prohibited. "),
+      DIV("This small <i>library</i> offers a way to dynamically create HTML elements\
+         using a tag name as Function."),
+      DIV("The library by default exports an object."),
+      DIV("Some examples (imported as ", CODE("tags"), ")"),
+      $T.UL(
+        $T.li($T.code("tags.div('Hello world')")),
+        $T.li($T.code("tags.p({class: 'helloworld', data: {world: ' World'}}, 'Hello')")),
+        $T.li($T.code("tags.span({text: 'Hello world'}")),
+        $T.li("<code>tags.P('hello &lt;i>world&lt;/i>')"),
+      ),
+      DIV("A tag function is <i>case insensitive</i> (so ",
+        CODE("tags.DIV"), " / ", CODE("tags.div"), " are equal)."),
+      DIV("The properties for a HTML element, e.g. (",
+        CODE("class"), " or ", CODE("id"), ") can be given as an object in the\
+          first argument. Everything from the next argument(s) is nested\
+          within the created element. It may be strings or other HTML elements.\
+          Strings may contain html."),
       DIV("The library uses a ", CODE("Proxy"),
-        ", so the elements are lazy loaded (on demand)."),
+        ", so the tag functions are <i>lazy loaded</i> (on demand)."),
+      DIV($T.i({data: {action: "revealCode"}}, "Click here"),
+        " to reveal the code used to create the html in demonstration page."),
       DIV({text: "Enjoy!"})
-  );
+    );
   
   document.body.append(
     DIV({class: "container"},
       DIV({class: "content"},
         topLink,
-        DETAILS({open: true}, SUMMARY("<span>About</span>"), detailsContent),
+        DETAILS({open: true}, SUMMARY("<span>About</span>"), aboutContent),
         DIV({id: "NameDiv"},
           H3({data: {name: "Mary POC Demo"}}),
           $T.p("How are <i><b>you</b></i> today?")
@@ -51,7 +68,7 @@ function demo() {
 function createCodeDetails() {
   const demoCode = demo.toString();
   $(`.content`).append(
-    $T.details(
+    $T.details({ id: "code" },
       $T.summary(`<span>The code for the above</span>`),
       $T.pre({class: `language-javascript line-numbers`},
         $T.code({
