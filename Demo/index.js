@@ -10,7 +10,7 @@ createCodeDetails();
 
 function demo() {
   // imported with
-  // import { default as $T, $} from "../tinyDOM.js";
+  // import { default as $T } from "../tinyDOM.js";
   // ------------------------------------------------
   const {H3, DIV, A, CODE, DETAILS, SUMMARY} = $T;
   const back2RepoLink = A({
@@ -22,14 +22,15 @@ function demo() {
   const aboutContent =
     DIV(
       DIV("This small <i>library</i> offers a way to dynamically create HTML elements\
-         using a tag name as Function."),
-      DIV("The library by default exports an object."),
-      DIV("Some examples (imported as ", CODE("tags"), ")"),
+         by converting tag names (<code>div</code> <code>table</code> etc.)\
+         to element creation functions."),
+      DIV("Some examples (the default library export was imported as ", CODE("tags"), ")"),
       $T.UL(
         $T.li($T.code("tags.div('Hello world')")),
         $T.li($T.code("tags.p({class: 'helloworld', data: {world: ' World'}}, 'Hello')")),
         $T.li($T.code("tags.span({text: 'Hello world'}")),
-        $T.li("<code>tags.P('hello &lt;i>world&lt;/i>')"),
+        $T.li("<code>tags.P('hello &lt;i>world&lt;/i>')</code>"),
+        $T.li($T.CODE("const {p, P} = tags; p('hello world')")),
       ),
       DIV("A tag function is <i>case insensitive</i> (so ",
         CODE("tags.DIV"), " / ", CODE("tags.div"), " are equal)."),
