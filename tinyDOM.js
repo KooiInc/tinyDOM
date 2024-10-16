@@ -1,11 +1,9 @@
-const [tags, $, $$, converts] = [
+const [tags, converts] = [
   tagFactory(),
-  selector => document.querySelector(selector),
-  selector => [...document.querySelectorAll(selector)],
   {html: `innerHTML`, text: `textContent`,  class: `className`},
 ];
 
-export { tags as default, $, $$ };
+export default tags;
 
 function tagFactory() {
   const tinyDOMProxyGetter = {
