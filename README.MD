@@ -19,4 +19,4 @@ Enjoy!
 
 ---
 For a more comprehensive DOM helper, check my [JQuery alike](https://github.com/KooiInc/JQL) 
-library (JQL).
+module (JQL).
