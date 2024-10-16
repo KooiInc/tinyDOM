@@ -21,6 +21,8 @@ function demo() {
   
   const aboutContent =
     DIV(
+      DIV("(", $T.i({data: {action: "revealCode"}}, "Click here"),
+        " to reveal the code used to create the html in this demonstration page)"),
       DIV("This small <i>library</i> offers a way to dynamically create HTML elements\
          by converting tag names (<code>div</code> <code>table</code> etc.)\
          to element creation functions."),
@@ -41,8 +43,6 @@ function demo() {
           Strings may contain html."),
       DIV("The library uses a ", CODE("Proxy"),
         ", so the tag functions are <i>lazy loaded</i> (on demand)."),
-      DIV($T.i({data: {action: "revealCode"}}, "Click here"),
-        " to reveal the code used to create the html in demonstration page."),
       DIV({text: "Enjoy!"})
     );
   
