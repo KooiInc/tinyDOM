@@ -1,7 +1,8 @@
-const [tags, $, $$] = [
+const [tags, $, $$, converts] = [
   tagFactory(),
   selector => document.querySelector(selector),
   selector => [...document.querySelectorAll(selector)],
+  {html: `innerHTML`, text: `textContent`,  class: `className`},
 ];
 
 export { tags as default, $, $$ };
@@ -59,18 +60,17 @@ function retrieveElementFromInitial(initial, tag) {
 }
 
 function cleanupProps(props) {
-  if (props.class) { props.className = props.class; }
-  if (props.html) { props.innerHTML = props.html; }
-  if (props.text) { props.textContent = props.text; }
-  
   delete props.data;
-  delete props.class;
-  delete props.html;
-  delete props.text;
+  Object.keys(props)
+   .forEach( key => {
+     const lcKey = key.toLowerCase();
+     if (lcKey in converts) {
+       props[converts[lcKey]] = props[key];
+       delete props[key];
+     }
+   });
   
-  return Object.fromEntries(
-    Object.entries(props).filter( ([key, value]) =>
-      allowed(key.trim(), `${value}`.trim()) ) );
+  return props;
 }
 
 function createElement(name, props = {}) {
@@ -100,13 +100,4 @@ function maybe({trial, whenError = err => console.log(err)} = {}) {
 
 function containsHTML(str) {
   return str.constructor === String && /<.*>/.test(str);
-}
-
-// Poor man's client side cleanup.
-// You should implement a server side sanitizer!
-function allowed(...values) {
-  return values.filter(v =>
-    v.toLowerCase().startsWith(`on`) ||
-    /javascript.+:|javascript:|function|injected|noreferrer|alert|DataURL|eval/gi .test(v))
-  .length < 1;
 }
