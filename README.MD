@@ -16,3 +16,7 @@ Check the [demonstration page](https://kooiinc.github.io/tinyDOM/Demo) to learn 
   (e.g. `tags.DIV` or `tags.div`, `const {h3, H3, DIV, p, P} = tags`)
 
 Enjoy!
+
+---
+For a more comprehensive DOM helper, check my [JQuery alike](https://github.com/KooiInc/JQL) 
+library (JQL).
