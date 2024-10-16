@@ -1,7 +1,7 @@
-import { default as $T, $} from "../tinyDOM.js";
+import $T from "../tinyDOM.js";
 document.addEventListener("click", evt => {
   if (evt.target.dataset?.action === `revealCode`) {
-    return $(`#code`).open = true;
+    return document.querySelector(`#code`).open = true;
   }
 });
 
@@ -10,7 +10,7 @@ createCodeDetails();
 
 function demo() {
   // imported with
-  // import { default as $T } from "../tinyDOM.js";
+  // import $T from "../tinyDOM.js";
   // ------------------------------------------------
   const {H3, DIV, A, CODE, DETAILS, SUMMARY, P, I, B} = $T;
   const back2RepoLink = A({
@@ -25,7 +25,7 @@ function demo() {
         " to reveal the code used to create the html in this demonstration page)"),
       DIV("This small <i>library</i> offers a way to dynamically create HTML elements\
          by converting tag names (<code>div</code> <code>table</code> etc.)\
-         to element creation functions."),
+         to element creation functions ('", I("tag functions"), "')."),
       DIV("Some examples (the default library export was imported as ", CODE("tags"), ")"),
       $T.UL(
         $T.li($T.code("tags.div('Hello world')")),
@@ -35,7 +35,7 @@ function demo() {
         $T.li($T.CODE("const {p, P} = tags; p('hello world')")),
       ),
       DIV("A tag function is <i>case insensitive</i> (so ",
-        CODE("tags.DIV"), " / ", CODE("tags.div"), " are equal)."),
+        CODE("tags.DIV"), " / ", CODE("tags.div"), " / ", CODE("tags.dIV"), " are equal)."),
       DIV("The properties for a HTML element, e.g. ",
         CODE("class"), " or ", CODE("id"), " can be given as an object in the\
           first argument. Everything from the next argument(s) is nested\
@@ -65,7 +65,7 @@ function demo() {
 // code
 function createCodeDetails() {
   const demoCode = demo.toString();
-  $(`.content`).append(
+  document.querySelector(`.content`).append(
     $T.details({ id: "code" },
       $T.summary(`<span>The code for the above</span>`),
       $T.pre({class: `language-javascript line-numbers`},
