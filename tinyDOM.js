@@ -27,22 +27,24 @@ function tagFactory() {
   return new Proxy({}, tinyDOMProxyGetter);
 }
 
-function tag2FN(tag) {
-  return function(initial, ...args) {
-    const elem = retrieveElementFromInitial(initial, tag);
+function processNext(root, argument, tagName) {
+  return maybe({
+    trial: _ => containsHTML(argument)
+      ? root.insertAdjacentHTML(`beforeend`, argument)
+      : root.append(argument),
+    whenError: err => console.info(`${tagName} not created\n`, err)
+  });
+}
 
-    if (args.length) {
-      args.forEach(arg => {
-        maybe({
-          trial: _ => containsHTML(arg)
-            ? elem.insertAdjacentHTML(`beforeend`, arg)
-            : elem.append(arg),
-          whenError: err => console.info(`${tag} not created\n`, err)})
-        });
-     }
+function tagFN(tagName, initial, ...nested) {
+  const elem = retrieveElementFromInitial(initial, tagName);
+  nested?.forEach(arg => processNext(elem, arg, tagName));
+  
+  return elem;
+}
 
-     return elem;
-  }
+function tag2FN(tagName) {
+  return (initial, ...args) => tagFN(tagName, initial, ...args);
 }
 
 function retrieveElementFromInitial(initial, tag) {
