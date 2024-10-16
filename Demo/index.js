@@ -4,7 +4,7 @@ document.addEventListener("click", evt => {
     return $(`#code`).open = true;
   }
 });
-const withHtml = 'Hello &lt;i>world &lt;/i>';
+
 demo();
 createCodeDetails();
 
@@ -13,12 +13,7 @@ function demo() {
   // import { default as $T, $} from "../tinyDOM.js";
   // ------------------------------------------------
   const {H3, DIV, A, CODE, DETAILS, SUMMARY} = $T;
-  const link2Repo = A({
-    href: "https://github.com/victorqribeiro/TinyJS",
-    target: "_blank",
-    text: "The TinyJS repository"
-  });
-  const topLink = A({
+  const back2RepoLink = A({
     target: "_top",
     href: "https://github.com/KooiInc/tinyDOM",
     text: "Back to repository"
@@ -53,7 +48,7 @@ function demo() {
   document.body.append(
     DIV({class: "container"},
       DIV({class: "content"},
-        topLink,
+        back2RepoLink,
         DETAILS({open: true}, SUMMARY("<span>About</span>"), aboutContent),
         DIV({id: "NameDiv"},
           H3({data: {name: "Mary POC Demo"}}),
