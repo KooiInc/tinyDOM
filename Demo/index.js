@@ -55,7 +55,7 @@ function demo() {
         DETAILS({open: true}, SUMMARY("<span>About</span>"), aboutContent),
         DIV({id: "NameDiv"},
           H3({data: {name: "Mary POC Demo"}}),
-          $T.p("How are <i><b>you</b></i> today?")
+          $T.p("How are ", $T.i($T.b("you")), " today?")
         )
       )
     )
