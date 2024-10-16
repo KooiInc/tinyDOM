@@ -3,7 +3,7 @@
 ### Create HTML elements using the element name as a function
 
 This small *library* offers a way to dynamically create HTML elements
-using a tag name as Function.
+using tag names as functions.
 
 Check the [demonstration page](https://kooiinc.github.io/tinyDOM/Demo) to learn how it works.
 
