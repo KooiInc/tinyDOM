@@ -12,7 +12,7 @@ function demo() {
   // imported with
   // import { default as $T } from "../tinyDOM.js";
   // ------------------------------------------------
-  const {H3, DIV, A, CODE, DETAILS, SUMMARY} = $T;
+  const {H3, DIV, A, CODE, DETAILS, SUMMARY, P, I, B} = $T;
   const back2RepoLink = A({
     target: "_top",
     href: "https://github.com/KooiInc/tinyDOM",
@@ -49,13 +49,13 @@ function demo() {
   // the elements until now only exist in memory
   // so, let's append them to the body of the DOM tree
   document.body.append(
-    DIV({class: "container"},
-      DIV({class: "content"},
+    DIV( {class: "container"},
+      DIV( {class: "content"},
         back2RepoLink,
         DETAILS({open: true}, SUMMARY("<span>About</span>"), aboutContent),
         DIV({id: "NameDiv"},
           H3({data: {name: "Mary POC Demo"}}),
-          $T.p("How are ", $T.i($T.b("you")), " today?")
+          P("How are ", I(B("you")), " today?")
         )
       )
     )
