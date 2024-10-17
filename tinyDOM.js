@@ -1,5 +1,5 @@
-const [tags, converts] = [tagFactory(), {html: `innerHTML`, text: `textContent`,  class: `className`}];
-export default tags;
+const converts = {html: `innerHTML`, text: `textContent`,  class: `className`};
+export default tagFactory();
 
 function tagFactory() {
   const tinyDOMProxyGetter = {
