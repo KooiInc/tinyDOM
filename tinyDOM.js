@@ -1,11 +1,7 @@
-const converts = {html: `innerHTML`, text: `textContent`,  class: `className`};
-export default tagFactory();
-
-function tagFactory() {
+export default (function() {
   const tinyDOMProxyGetter = {
     get(obj, key) {
       const tag = key.toLowerCase();
-      
       switch(true) {
         case tag in obj: return obj[tag];
         case createElement(tag) instanceof HTMLElement: return (obj[tag] = tag2FN(key)) && obj[tag];
@@ -14,7 +10,9 @@ function tagFactory() {
     }
   };
   return new Proxy({}, tinyDOMProxyGetter);
-}
+})();
+
+const converts = {html: `innerHTML`, text: `textContent`,  class: `className`};
 
 function processNext(root, argument, tagName) {
   return maybe({
