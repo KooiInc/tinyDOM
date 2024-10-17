@@ -13,12 +13,10 @@ function demo() {
   // import $T from "../tinyDOM.js";
   // ------------------------------------------------
   const {H3, DIV, A, CODE, DETAILS, SUMMARY, P, I, B} = $T;
-  const back2RepoLink = A({
+  const back2RepoLink = A( {
     target: "_top",
     href: "https://github.com/KooiInc/tinyDOM",
-    text: "Back to repository"
-  });
-  
+    text: "Back to repository" } );
   const aboutContent =
     DIV(
       DIV("(", $T.i({data: {action: "revealCode"}}, "Click here"),
