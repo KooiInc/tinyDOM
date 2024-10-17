@@ -1,68 +1,52 @@
-const [tags, converts] = [
-  tagFactory(),
-  {html: `innerHTML`, text: `textContent`,  class: `className`},
-];
-
+const [tags, converts] = [tagFactory(), {html: `innerHTML`, text: `textContent`,  class: `className`}];
 export default tags;
 
 function tagFactory() {
   const tinyDOMProxyGetter = {
     get(obj, key) {
       const tag = key.toLowerCase();
+      
       switch(true) {
         case tag in obj: return obj[tag];
-        case document.createElement(tag) instanceof HTMLElement:
-          return (obj[tag] = tag2FN(key)) && obj[tag];
+        case createElement(tag) instanceof HTMLElement: return (obj[tag] = tag2FN(key)) && obj[tag];
         default: return obj[key];
       }
     }
   };
-
   return new Proxy({}, tinyDOMProxyGetter);
 }
 
 function processNext(root, argument, tagName) {
   return maybe({
-    trial: _ => containsHTML(argument)
-      ? root.insertAdjacentHTML(`beforeend`, argument)
-      : root.append(argument),
+    trial: _ => containsHTML(argument) ? root.insertAdjacentHTML(`beforeend`, argument) : root.append(argument),
     whenError: err => console.info(`${tagName} not created\n`, err)
   });
-}
-
-function tagFN(tagName, initial, ...nested) {
-  const elem = retrieveElementFromInitial(initial, tagName);
-  nested?.forEach(arg => processNext(elem, arg, tagName));
-  
-  return elem;
 }
 
 function tag2FN(tagName) {
   return (initial, ...args) => tagFN(tagName, initial, ...args);
 }
 
+function tagFN(tagName, initial, ...nested) {
+  const elem = retrieveElementFromInitial(initial, tagName);
+  nested?.forEach(arg => processNext(elem, arg, tagName));
+  return elem;
+}
+
 function retrieveElementFromInitial(initial, tag) {
   switch(true) {
     case initial.constructor === String:
       return createElement(tag, containsHTML(initial) ? {html: initial} : {text: initial});
-    case initial instanceof HTMLElement:
-      return createElementAndAppend(tag, initial);
-    default:
-      return createElement(tag, initial);
+    case initial instanceof HTMLElement: return createElementAndAppend(tag, initial);
+    default: return createElement(tag, initial);
   }
 }
 
 function cleanupProps(props) {
+  Object.keys(props).forEach( prop => {
+     const propCI = prop.toLowerCase();
+     propCI in converts && (props[converts[propCI]] = props[prop]) && delete props[prop]; } );
   delete props.data;
-  Object.keys(props)
-   .forEach( key => {
-     const lcKey = key.toLowerCase();
-     if (lcKey in converts) {
-       props[converts[lcKey]] = props[key];
-       delete props[key];
-     }
-   });
-  
   return props;
 }
 
@@ -74,27 +58,19 @@ function createElementAndAppend(tag, toAppend) {
 
 function createElement(name, props = {}) {
   const data = Object.entries(structuredClone(props?.data || {}));
-  props = cleanupProps(props);
+  props = cleanupProps(props || {});
   const elem = Object.assign(document.createElement(name), props);
-  
-  if (data.length) {
-    for (let [key, value] of data) {
-      elem.dataset[key] = value;
-    }
-  }
-  
+  data.length && data.forEach(([key, value]) => elem.dataset[key] = value);
   return elem;
 }
 
 function maybe({trial, whenError = err => console.log(err)} = {}) {
   try {
     if (trial?.constructor !== Function) {
-      throw new TypeError(`maybe: trial parameter not a Function or Lambda`);
+      throw new TypeError(`tinyDOM:maybe: trial parameter not a Function`);
     }
     return trial();
-  } catch (err) {
-    return whenError?.constructor === Function ? whenError(err) : console.error(err);
-  }
+  } catch (err) { return whenError(err); }
 }
 
 function containsHTML(str) {
