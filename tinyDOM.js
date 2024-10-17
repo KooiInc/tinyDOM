@@ -9,16 +9,12 @@ function tagFactory() {
   const tinyDOMProxyGetter = {
     get(obj, key) {
       const tag = key.toLowerCase();
-      const inStore = tag in obj;
-      const maybeElement =  inStore || 
-        document.createElement(tag) instanceof HTMLElement;
-      
-      if (maybeElement) {
-        if (!inStore) { obj[tag] = tag2FN(key); }
-        return obj[tag];
+      switch(true) {
+        case tag in obj: return obj[tag];
+        case document.createElement(tag) instanceof HTMLElement:
+          return (obj[tag] = tag2FN(key)) && obj[tag];
+        default: return obj[key];
       }
-
-      return obj[key];
     }
   };
 
