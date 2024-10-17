@@ -48,12 +48,9 @@ function tag2FN(tagName) {
 function retrieveElementFromInitial(initial, tag) {
   switch(true) {
     case initial.constructor === String:
-      return createElement(tag, containsHTML(initial)
-        ? {html: initial} : {text: initial});
+      return createElement(tag, containsHTML(initial) ? {html: initial} : {text: initial});
     case initial instanceof HTMLElement:
-      const elem = createElement(tag);
-      elem.append(initial);
-      return elem;
+      return createElementAndAppend(tag, initial);
     default:
       return createElement(tag, initial);
   }
@@ -71,6 +68,12 @@ function cleanupProps(props) {
    });
   
   return props;
+}
+
+function createElementAndAppend(tag, toAppend) {
+  const elem = createElement(tag);
+  elem.append(toAppend);
+  return elem;
 }
 
 function createElement(name, props = {}) {
