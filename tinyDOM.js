@@ -33,7 +33,7 @@ function tagFN(tagName, initial, ...nested) {
 
 function retrieveElementFromInitial(initial, tag) {
   switch(true) {
-    case initial.constructor === String:
+    case initial?.constructor === String:
       return createElement(tag, containsHTML(initial) ? {html: initial} : {text: initial});
     case initial instanceof HTMLElement: return createElementAndAppend(tag, initial);
     default: return createElement(tag, initial);
