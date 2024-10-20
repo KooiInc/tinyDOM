@@ -12,7 +12,8 @@ function demo() {
   // imported with
   // import $T from "../tinyDOM.js";
   // ------------------------------------------------
-  const {H3, DIV, A, CODE, DETAILS, SUMMARY, P, I, B} = $T;
+  const {H3, DIV, A, CODE, DETAILS, SUMMARY, P, I, B, NOTHING} = $T;
+  console.log(`wtf`, NOTHING());
   const back2RepoLink = A( {
     target: "_top",
     href: "https://github.com/KooiInc/tinyDOM",
@@ -53,7 +54,14 @@ function demo() {
         DETAILS({open: true}, SUMMARY("<span>About</span>"), aboutContent),
         DIV({id: "NameDiv"},
           H3({data: {name: "Mary POC Demo"}}),
-          P("How are ", I(B("you")), " today?")
+          P("How are ", I(B("you")), " today?"),
+          DIV("Let's check this NOTHING tag function (",
+            CODE("NOTHING()"),
+            `, see `,
+            I({data: {action: "revealCode"}}, "Code"),
+           `) => `,
+            NOTHING()
+          )
         )
       )
     )
