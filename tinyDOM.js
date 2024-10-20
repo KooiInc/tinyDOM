@@ -4,15 +4,21 @@ export default (function tagProxyFactory() {
     switch(true) {
       case tag in obj: return obj[tag];
       case validateTag(tag): return (obj[tag] = tag2FN(key)) && obj[tag];
-      default: return obj[key];
+      default: return createErrorElementFN(obj, tag, key);
     }
   } };
   return new Proxy({}, tinyDOMProxyGetter);
 })();
 const converts = {html: `innerHTML`, text: `textContent`,  class: `className`};
 
+function createErrorElementFN(obj, tag, key) {
+  obj[tag] = () => createElement(`b`, {style:`color:red`,text:`Can not create '${key}'`});
+  return obj[tag];
+}
+
 function validateTag(name) {
-  return !/[^a-z0-9]|undefined|symbol|null/i.test(String(name)) && createElement(name) instanceof HTMLElement;
+  return !/[^a-z0-9]|undefined|symbol|null/i.test(String(name)) &&
+    !(createElement(name) instanceof HTMLUnknownElement);
 }
 
 function processNext(root, argument, tagName) {
