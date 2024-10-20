@@ -1,18 +1,19 @@
-export default (function() {
-  const tinyDOMProxyGetter = {
-    get(obj, key) {
-      const tag = key.toLowerCase();
-      switch(true) {
-        case tag in obj: return obj[tag];
-        case createElement(tag) instanceof HTMLElement: return (obj[tag] = tag2FN(key)) && obj[tag];
-        default: return obj[key];
-      }
+export default (function tagProxyFactory() {
+  const tinyDOMProxyGetter = { get(obj, key) {
+    const tag = String(key)?.toLowerCase();
+    switch(true) {
+      case tag in obj: return obj[tag];
+      case validateTag(tag): return (obj[tag] = tag2FN(key)) && obj[tag];
+      default: return obj[key];
     }
-  };
+  } };
   return new Proxy({}, tinyDOMProxyGetter);
 })();
-
 const converts = {html: `innerHTML`, text: `textContent`,  class: `className`};
+
+function validateTag(name) {
+  return !/[^a-z0-9]|undefined|symbol|null/i.test(String(name)) && createElement(name) instanceof HTMLElement;
+}
 
 function processNext(root, argument, tagName) {
   return maybe({
@@ -42,8 +43,8 @@ function retrieveElementFromInitial(initial, tag) {
 
 function cleanupProps(props) {
   Object.keys(props).forEach( prop => {
-     const propCI = prop.toLowerCase();
-     propCI in converts && (props[converts[propCI]] = props[prop]) && delete props[prop]; } );
+    const propCI = prop.toLowerCase();
+    propCI in converts && (props[converts[propCI]] = props[prop]) && delete props[prop]; } );
   delete props.data;
   return props;
 }
@@ -54,10 +55,10 @@ function createElementAndAppend(tag, toAppend) {
   return elem;
 }
 
-function createElement(name, props = {}) {
+function createElement(tagName, props = {}) {
   const data = Object.entries(structuredClone(props?.data || {}));
-  props = cleanupProps(props || {});
-  const elem = Object.assign(document.createElement(name), props);
+  props = cleanupProps(props);
+  const elem = Object.assign(document.createElement(tagName), props);
   data.length && data.forEach(([key, value]) => elem.dataset[key] = value);
   return elem;
 }
