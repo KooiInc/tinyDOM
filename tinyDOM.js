@@ -1,4 +1,7 @@
-import IS from "https://cdn.jsdelivr.net/gh/KooiInc/typeofAnything/typeofany.module.min.js";
+import {
+  default as IS,
+  maybe,
+} from "https://cdn.jsdelivr.net/gh/KooiInc/typeofAnything@latest/typeofany.module.min.js";
 export default ( function tagProxyFactory() {
   const tinyDOMProxyGetter = { get(obj, key) {
     const tag = String(key)?.toLowerCase();
@@ -18,13 +21,13 @@ function createErrorElementFN(obj, tag, key) {
 }
 
 function validateTag(name) {
-  return !/[^a-z0-9]|undefined|symbol|null/i.test(String(name)) && !IS(createElement(name), HTMLUnknownElement);
+  return IS(createElement(name), {isTypes: HTMLElement, notTypes: HTMLUnknownElement});
 }
 
 function processNext(root, argument, tagName) {
   return maybe({
     trial: _ => containsHTML(argument) ? root.insertAdjacentHTML(`beforeend`, argument) : root.append(argument),
-    whenError: err => console.info(`${tagName} not created\n`, err)
+    whenError: err => console.info(`${tagName} not created, reason\n`, err)
   });
 }
 
@@ -48,6 +51,10 @@ function retrieveElementFromInitial(initial, tag) {
 }
 
 function cleanupProps(props) {
+  props = IS(props, { isTypes: Object, defaultValue: {} } );
+  
+  if (Object.keys(props).length < 1) { return {}; }
+  
   delete props.data;
   const propsClone = structuredClone(props);
   Object.keys(propsClone).forEach( key => {
@@ -64,22 +71,11 @@ function createElementAndAppend(tag, element2Append) {
 
 function createElement(tagName, props = {}) {
   const data = Object.entries(structuredClone(props?.data || {}));
-  const elem = Object.assign(document.createElement(tagName), cleanupProps(ISOr(props, {}, Object)));
+  const elem = Object.assign(
+    document.createElement(tagName),
+    cleanupProps(props) );
   data.length && data.forEach(([key, value]) => elem.dataset[key] = value);
   return elem;
-}
-
-function maybe({trial, whenError = err => console.log(err)} = {}) {
-  try {
-    if (!IS(trial, Function)) {
-      throw new TypeError(`tinyDOM:maybe: trial parameter not a Function`);
-    }
-    return trial();
-  } catch (err) { return IS(whenError, Function) ? whenError(err) : console.error(err); }
-}
-
-function ISOr(input, orValue, ...types) {
-  return IS(input, ...types) ? input : orValue;
 }
 
 function containsHTML(str) {
