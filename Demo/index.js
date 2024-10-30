@@ -13,7 +13,6 @@ function demo() {
   // import $T from "../tinyDOM.js";
   // ------------------------------------------------
   const {H3, DIV, A, CODE, DETAILS, SUMMARY, P, I, B, NOTHING} = $T;
-  console.log(`wtf`, NOTHING());
   const back2RepoLink = A( {
     target: "_top",
     href: "https://github.com/KooiInc/tinyDOM",
@@ -77,7 +76,10 @@ function createCodeDetails() {
       $T.pre({class: `language-javascript line-numbers`},
         $T.code({
           class: `language-javascript`,
-          text: demoCode.slice(demoCode.indexOf(`\/\/`), -2).replace(/\n {2}/g, `\n`) } ) ) )
+          text: demoCode
+                .slice(demoCode.indexOf(`\/\/`), -1)
+                .replace(/\n {2}/g, `\n`).trim() } ) )
+    )
   );
   Prism.highlightAll();
 }
