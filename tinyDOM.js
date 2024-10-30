@@ -79,5 +79,5 @@ function createElement(tagName, props = {}) {
 }
 
 function containsHTML(str) {
-  return str.constructor === String && /<.*>/.test(str);
+  return str.constructor === String && /<.*>|&lt;|&gt;/.test(str);
 }
