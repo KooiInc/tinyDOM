@@ -39,6 +39,11 @@ function demo() {
           first argument. Everything from the next argument(s) is nested\
           within the created element. It may be strings or other HTML elements.\
           Strings may contain html."),
+      DIV("Invalid tagnames will be converted to a function returning a ",
+        CODE("&lt;b style:'color:red'>"), " element containing an error message.\
+        See ", CODE("NOTHING()"), " in the ",
+        I({data: {action: "revealCode"}}, "example code")
+      ),
       DIV("The library uses a ", CODE("Proxy"),
         ", so the tag functions are <i>lazy loaded</i> (on demand)."),
       DIV({text: "Enjoy!"})
