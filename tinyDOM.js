@@ -16,7 +16,7 @@ export default ( function tagProxyFactory() {
 const converts = {html: `innerHTML`, text: `textContent`,  class: `className`};
 
 function createErrorElementFN(obj, tag, key) {
-  obj[tag] = () => createElement(`b`, {style:`color:red`,text:`Can not create '${key}'`});
+  obj[tag] = () => createElement(`b`, {style:`color:red`,text:`'${key}' is not a valid HTML-tag`});
   return obj[tag];
 }
 
