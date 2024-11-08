@@ -1,10 +1,5 @@
 import $T from "../tinyDOM.js";
-document.addEventListener("click", evt => {
-  if (evt.target.dataset?.action === `revealCode`) {
-    return document.querySelector(`#code`).open = true;
-  }
-});
-
+addHandler();
 demo();
 createCodeDetails();
 
@@ -78,6 +73,14 @@ function demo() {
       )
     )
   );
+}
+
+function addHandler() {
+  document.addEventListener("click", evt => {
+    if (evt.target.dataset?.action === `revealCode`) {
+      return document.querySelector(`#code`).open = true;
+    }
+  });
 }
 
 // code
