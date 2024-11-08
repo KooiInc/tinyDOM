@@ -1,7 +1,7 @@
 import {
   default as IS,
   maybe,
-} from "https://cdn.jsdelivr.net/gh/KooiInc/typeofAnything@latest/typeofany.module.min.js";
+} from "https://cdn.jsdelivr.net/gh/KooiInc/typeofAnything/typeofany.module.min.js";
 export default ( function tagProxyFactory() {
   const tinyDOMProxyGetter = { get(obj, key) {
     const tag = String(key)?.toLowerCase();
@@ -11,7 +11,8 @@ export default ( function tagProxyFactory() {
       default: return createErrorElementFN(obj, tag, key);
     }
   } };
-  return new Proxy({}, tinyDOMProxyGetter); } )();
+  return new Proxy({}, tinyDOMProxyGetter); }
+)();
 
 const converts = {html: `innerHTML`, text: `textContent`,  class: `className`};
 
@@ -51,16 +52,13 @@ function retrieveElementFromInitial(initial, tag) {
 }
 
 function cleanupProps(props) {
-  props = IS(props, { isTypes: Object, defaultValue: {} } );
-  
-  if (Object.keys(props).length < 1) { return {}; }
-  
   delete props.data;
-  const propsClone = structuredClone(props);
-  Object.keys(propsClone).forEach( key => {
+  if ( Object.keys(props).length < 1 ) { return props; }
+  
+  Object.keys(props).forEach( key => {
     const keyCI = key.toLowerCase();
-    keyCI in converts && (propsClone[converts[keyCI]] = propsClone[key]) && delete propsClone[key]; } );
-  return propsClone;
+    keyCI in converts && (props[converts[keyCI]] = props[key]) && delete props[key]; } );
+  return props;
 }
 
 function createElementAndAppend(tag, element2Append) {
@@ -73,7 +71,7 @@ function createElement(tagName, props = {}) {
   const data = Object.entries(structuredClone(props?.data || {}));
   const elem = Object.assign(
     document.createElement(tagName),
-    cleanupProps(props) );
+    cleanupProps( IS(props, {isTypes: Object, notTypes: Array, defaultValue: {}})) );
   data.length && data.forEach(([key, value]) => elem.dataset[key] = value);
   return elem;
 }
