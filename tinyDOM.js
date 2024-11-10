@@ -22,7 +22,7 @@ function createErrorElementFN(obj, tag, key) {
 }
 
 function validateTag(name) {
-  return IS(createElement(name), {isTypes: [HTMLElement, CharacterData], notTypes: HTMLUnknownElement});
+  return isComment(name) || IS(createElement(name), {isTypes: [HTMLElement, CharacterData], notTypes: HTMLUnknownElement});
 }
 
 function processNext(root, argument, tagName) {
@@ -42,10 +42,17 @@ function tagFN(tagName, initial, ...nested) {
   return elem;
 }
 
+function cleanupComment(initial) {
+  return IS(initial, {isTypes: Object, notTypes: Array})
+    ? initial?.text ?? initial?.textContent ?? `` : String(initial);
+}
+
 function retrieveElementFromInitial(initial, tag) {
+  initial = isComment(tag) ? cleanupComment(initial) : initial;
+  
   switch(true) {
     case IS(initial, String):
-      return createElement(tag, containsHTML(initial) ? {html: initial} : {text: initial});
+      return createElement(tag, containsHTML(initial, tag) ? {html: initial} : {text: initial});
     case IS(initial, HTMLElement): return createElementAndAppend(tag, initial);
     default: return createElement(tag, initial);
   }
@@ -61,6 +68,8 @@ function cleanupProps(props) {
   return props;
 }
 
+function isComment(tag) { return /comment/i.test(tag); }
+
 function createElementAndAppend(tag, element2Append) {
   const elem = createElement(tag);
   elem.append(element2Append);
@@ -70,12 +79,12 @@ function createElementAndAppend(tag, element2Append) {
 function createElement(tagName, props = {}) {
   const data = Object.entries(structuredClone(props?.data || {}));
   const elem = Object.assign(
-    /comment/i.test(tagName) ? new Comment() : document.createElement(tagName),
+    isComment(tagName) ? new Comment() : document.createElement(tagName),
     cleanupProps( IS(props, {isTypes: Object, notTypes: Array, defaultValue: {}})) );
   data.length && data.forEach(([key, value]) => elem.dataset[key] = value);
   return elem;
 }
 
-function containsHTML(str) {
-  return str.constructor === String && /<.*>|&lt;|&gt;/.test(str);
+function containsHTML(str, tag) {
+  return !isComment(tag) && str.constructor === String && /<.*>|&[#|0-9|a-z]+[^;];/i.test(str);
 }
