@@ -22,7 +22,7 @@ function createErrorElementFN(obj, tag, key) {
 }
 
 function validateTag(name) {
-  return IS(createElement(name), {isTypes: HTMLElement, notTypes: HTMLUnknownElement});
+  return IS(createElement(name), {isTypes: [HTMLElement, CharacterData], notTypes: HTMLUnknownElement});
 }
 
 function processNext(root, argument, tagName) {
@@ -70,7 +70,7 @@ function createElementAndAppend(tag, element2Append) {
 function createElement(tagName, props = {}) {
   const data = Object.entries(structuredClone(props?.data || {}));
   const elem = Object.assign(
-    document.createElement(tagName),
+    /comment/i.test(tagName) ? new Comment() : document.createElement(tagName),
     cleanupProps( IS(props, {isTypes: Object, notTypes: Array, defaultValue: {}})) );
   data.length && data.forEach(([key, value]) => elem.dataset[key] = value);
   return elem;

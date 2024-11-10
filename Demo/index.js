@@ -55,6 +55,7 @@ function demo() {
   // the elements until now only exist in memory
   // so, let's append them to the body of the DOM tree
   document.body.append(
+    $T.comment(`hello, this is a comment`),
     DIV( {class: "container"},
       DIV( {class: "content"},
         back2RepoLink,
