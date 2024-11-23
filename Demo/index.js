@@ -14,6 +14,11 @@ function demo() {
     target: "_top",
     href: "https://github.com/KooiInc/tinyDOM",
     text: "Back to repository" } );
+  const jqlLink = A({
+    target: "_blank",
+    src: "https://github.com/KooiInc/JQL",
+    text: "the JQL (JQueryLike) module",
+  });
   const aboutContent =
     DIV(
       DIV("(", revealCodeLink("Click here"),
@@ -49,6 +54,7 @@ function demo() {
       ),
       DIV("The library uses a ", CODE("Proxy"),
         ", so the tag functions are <i>lazy loaded</i> (on demand)."),
+      DIV("The library is included an used in ", jqlLink ),
       DIV({text: "Enjoy!"})
     );
   
