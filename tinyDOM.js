@@ -22,7 +22,7 @@ function createErrorElementFN(obj, tag, key) {
 }
 
 function validateTag(name) {
-  return isComment(name) || IS(createElement(name), {isTypes: [HTMLElement, CharacterData], notTypes: HTMLUnknownElement});
+  return IS(createElement(name), {isTypes: [HTMLElement, CharacterData, Comment], notTypes: HTMLUnknownElement});
 }
 
 function processNext(root, argument, tagName) {
@@ -86,5 +86,5 @@ function createElement(tagName, props = {}) {
 }
 
 function containsHTML(str, tag) {
-  return !isComment(tag) && str.constructor === String && /<.*>|&[#|0-9|a-z]+[^;];/i.test(str);
+  return !isComment(tag) && str.constructor === String && /<.*>|&[#|0-9a-z]+[^;];/i.test(str);
 }
