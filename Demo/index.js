@@ -16,8 +16,9 @@ function demo() {
     text: "Back to repository" } );
   const jqlLink = A({
     target: "_blank",
+    class: "linkJQL",
     src: "https://github.com/KooiInc/JQL",
-    text: "the JQL (JQueryLike) module",
+    html: "the JQL (<i>JQ</i>uery<i>L</i>ike) module",
   });
   const aboutContent =
     DIV(

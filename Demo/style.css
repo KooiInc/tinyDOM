@@ -46,6 +46,9 @@
     }
 
     a {
+      &.linkJQL {
+        i { color: #f08d49; }
+      }
       &[target] {
         display: inline-block;
         text-decoration: none;
