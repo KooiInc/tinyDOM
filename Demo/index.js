@@ -17,7 +17,7 @@ function demo() {
   const jqlLink = A({
     target: "_blank",
     class: "linkJQL",
-    src: "https://github.com/KooiInc/JQL",
+    href: "https://github.com/KooiInc/JQL",
     html: "the JQL (<i>JQ</i>uery<i>L</i>ike) module",
   });
   const aboutContent =
