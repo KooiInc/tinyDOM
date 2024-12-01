@@ -9,7 +9,9 @@ function tinyDOM() {
         case tag in obj: return obj[tag];
         case validateTag(tag): return createTagFunctionProperty(obj, tag, key);
         default: return createTagFunctionProperty(obj, tag, key, true);
-      } } };
+      }
+    }, enumerable: false, configurable: false
+  };
   return new Proxy({}, tinyDOMProxyGetter);
 }
 
