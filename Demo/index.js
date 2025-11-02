@@ -17,8 +17,8 @@ function demo() {
   const jqlLink = A({
     target: "_blank",
     class: "linkJQL",
-    href: "https://github.com/KooiInc/JQL",
-    html: "the JQL (<i>JQ</i>uery<i>L</i>ike) module",
+    href: "https://codeberg.org/KooiInc/JQx",
+    text: "JQx",
   });
   const aboutContent =
     DIV(
@@ -55,7 +55,7 @@ function demo() {
       ),
       DIV("The library uses a ", CODE("Proxy"),
         ", so the tag functions are <i>lazy loaded</i> (on demand)."),
-      DIV("The library is included an used in ", jqlLink ),
+      DIV("The library is included an used in ", jqlLink, $T.SPAN(` (a jQuery alike module)`) ),
       DIV({text: "Enjoy!"})
     );
   

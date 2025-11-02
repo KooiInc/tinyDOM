@@ -1,4 +1,4 @@
-import { default as IS, maybe, } from "https://cdn.jsdelivr.net/gh/KooiInc/typeofAnything/typeofany.module.min.js";
+import { default as IS, maybe, } from "https://unpkg.com/typeofanything@latest/Dist/toa.min.js";
 export default tinyDOM();
 const converts = { html: `innerHTML`, text: `textContent`,  class: `className` };
 
