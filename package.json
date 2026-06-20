@@ -1,0 +1,27 @@
+{
+  "name": "tinydom-es",
+  "version": "1.0.0",
+  "description": "Dynamically create HTML elements using tag names as functions",
+  "keywords": [
+    "HTML",
+    "helper",
+    "DOM",
+    "DOM manipulation",
+    "ES20xx"
+  ],
+  "homepage": "https://github.com/KooiInc/tinyDOM#readme",
+  "bugs": {
+    "url": "https://github.com/KooiInc/tinyDOM/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KooiInc/tinyDOM.git"
+  },
+  "license": "ISC",
+  "author": "KooiInc",
+  "type": "module",
+  "main": "tinyDOM.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
