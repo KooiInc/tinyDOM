@@ -1,3 +1,5 @@
+[![](https://img.shields.io/npm/v/tinydom-es.svg?labelColor=cb3837&logo=npm&color=dcfdd9)](https://www.npmjs.com/package/tinydom-es)
+
 ## tinyDOM
 
 ### Create HTML elements using the element name as a function
@@ -18,5 +20,8 @@ Check the [demonstration page](https://kooiinc.github.io/tinyDOM/Demo) to learn 
 Enjoy!
 
 ---
-For a more comprehensive DOM helper, check my [JQuery alike](https://github.com/KooiInc/JQL) 
-module (JQL).
+For a more comprehensive DOM helper, check my [JQuery alike](https://github.com/KooiInc/JQx) 
+module (JQx).
+
+
+https://www.npmjs.com/package/tinydom-es
