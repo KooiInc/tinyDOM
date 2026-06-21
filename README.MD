@@ -22,6 +22,3 @@ Enjoy!
 ---
 For a more comprehensive DOM helper, check my [JQuery alike](https://github.com/KooiInc/JQx) 
 module (JQx).
-
-
-https://www.npmjs.com/package/tinydom-es
