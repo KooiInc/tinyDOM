@@ -1,0 +1,32 @@
+:host {
+  font: 14px/22px system-ui, verdana, arial, sans-serif;
+  color: #555;
+  display: inline-block;
+  position: fixed;
+  background-color: #fff;
+  top: 0;
+  left: 50%;
+  height: 22px;
+  transform: translateX(-50%);
+  z-index: 2;
+  border-radius: 4px;
+  padding: 2px 0;
+  width: 100vw;
+  text-align: center;
+  box-shadow: 0 2px 14px #999;
+
+  .backlink {
+    font-weight: bold;
+    color: rgb(0, 0, 238);
+  }
+
+  ::slotted(.yr) {
+    font-weight: bold;
+    color: green;
+  }
+
+  ::slotted(a) {
+    font-weight: bold;
+    text-decoration: none;
+  }
+}

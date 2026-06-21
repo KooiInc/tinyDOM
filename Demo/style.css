@@ -24,6 +24,18 @@
       div {
         margin: 0.8rem 0;
         line-height: 18px;
+
+        &.codeCenter {
+          margin: 0.2em 0;
+          text-align: center;
+          border: 1px dotted #999;
+          padding: 5px;
+          background-color: hsl(210, 8%, 90%);
+        }
+
+        &.noMargin {
+          margin: 0.2em 0;
+        }
       }
 
       summary {
@@ -96,7 +108,7 @@
     code:not(.language-javascript) {
       background-color: hsl(210, 8%, 90%);
       color: hsl(210, 8%, 5%);
-      padding: 2px 4px;
+      padding: 2px 1px;
       display: inline-block;
       border-radius: 4px;
       margin: 1px 0;
