@@ -63,7 +63,8 @@ function demo() {
         revealCodeLink("example code")
       ),
       $T.div("Autonomous custom elements can also be used. The top bar of this demonstration " +
-        "page is a small web component: <code>&lt;copyright-slotted&gt;</code>. It is created using ",
+        "page is a small web component: <code>&lt;copyright-slotted&gt;</code>. " +
+        "It is created using ",
         $T.code('$T["copyright-slotted"](...)'), ", which can also be ",
         $T.code('$T.copyrightSlotted(...)'), `.`),
       DIV("The library uses a ", CODE("Proxy"),
