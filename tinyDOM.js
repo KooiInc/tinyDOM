@@ -1,27 +1,64 @@
 import { default as IS, maybe, } from "https://unpkg.com/typeofanything@latest/Dist/toa.min.js";
-export default tinyDOM();
 const converts = { html: `innerHTML`, text: `textContent`,  class: `className` };
+let elementFunctionCollection = {};
+let error = _ => null;
+
+export default tinyDOM();
 
 function tinyDOM() {
-  const tinyDOMProxyGetter = { get(obj, key) {
-      const tag = String(key)?.toLowerCase();
-      switch(true) {
-        case tag in obj: return obj[tag];
-        case validateTag(tag): return createTagFunctionProperty(obj, tag, key);
-        default: return createTagFunctionProperty(obj, tag, key, true);
-      }
-    }, enumerable: false, configurable: false
-  };
-  return new Proxy({}, tinyDOMProxyGetter);
+  return Object.freeze(new Proxy(elementFunctionCollection, getProxy()));
 }
 
-function createTagFunctionProperty(obj, tag, key, isError = false) {
-  Object.defineProperty(obj, tag, { get() { return isError ? _ => errorElement(key) : tag2FN(tag); } } );
-  return obj[tag];
+function getProxy() {
+  return {
+    get(tagFns, key) {
+      const tagRaw = String(key);
+      const isAutonomousCustom = tagRaw.includes(`-`) || /([a-z][A-Z])/.test(tagRaw);
+      const tag = isAutonomousCustom ? toDashedNotation(tagRaw) : String(key)?.toLowerCase();
+      
+      switch(true) {
+        case tag in tagFns: return tagFns[tag];
+        case validateTag(tag): return createTagFunctionProperty({tag, tagRaw: isAutonomousCustom ? tagRaw : undefined, key});
+        default: return createTagFunctionProperty({tag, key, isError: true});
+      }
+    },
+    set(tagFns, key, value) {
+      if (key === `setError` && typeof value === 'function') { error = value; }
+      return true;
+    },
+    enumerable: false, configurable: false
+  };
+}
+
+function createTagFunctionProperty({tag, key, tagRaw, isError = false} = {}) {
+  let writableClone = cloneExact();
+  
+  if (tagRaw) {
+    Object.defineProperty(writableClone, tagRaw, {
+      get() { return isError ? _ => error(key) ?? `` : tag2FN(tag); }
+    } );
+  }
+  
+  Object.defineProperty(writableClone, tag, {
+    get() { return isError ? _ => error(key) ?? `` : tag2FN(tag); }
+  } );
+  
+  return reFreeze(writableClone, tagRaw ?? tag);
+}
+
+function reFreeze(writableClone, tag) {
+  elementFunctionCollection = Object.freeze(new Proxy(writableClone, getProxy()));
+  return elementFunctionCollection[tag];
+}
+
+function cloneExact() {
+  return Object.fromEntries(
+    Object.entries(Object.getOwnPropertyDescriptors(elementFunctionCollection))
+  );
 }
 
 function processNext(root, next, tagName) {
-  next = next?.isJQL && next.first() || next;
+  next = next?.isJQx && next.first() || next;
   return maybe({
     trial: _ => containsHTML(next) ? root.insertAdjacentHTML(`beforeend`, next) : root.append(next),
     whenError: err => console.info(`${tagName} not created, reason\n`, err)
@@ -76,9 +113,20 @@ function isObjectCheck(someObject, defaultValue) {
     : IS(someObject, {isTypes: Object, notTypes: [Array, null, NaN, Proxy]});
 }
 
-function cleanupComment(initial) { return isObjectCheck(initial) ? initial?.text ?? initial?.textContent ?? `` : String(initial); }
-function errorElement(key) { return createElement(`b`, {style:`color:red`,text:`'${key}' is not a valid HTML-tag`}); }
-function containsHTML(str, tag) { return !isComment(tag) && IS(str, String) && /<.*>|&[#|0-9a-z]+[^;];/i.test(str); }
+function toDashedNotation(str2Convert) {
+  return str2Convert.replace(/[A-Z]/g, a => `-${a.toLowerCase()}`).replace(/^-|-$/, ``);
+}
+
+function cleanupComment(initial) {
+  return isObjectCheck(initial) ? initial?.text ?? initial?.textContent ?? `` : String(initial);
+}
+
+function containsHTML(str, tag) {
+  return !isComment(tag) && IS(str, String) && /<.*>|&[#|0-9a-z]+[^;];/i.test(str);
+}
+
 function isComment(tag) { return /comment/i.test(tag); }
+
 function validateTag(name) { return !IS(createElement(name), HTMLUnknownElement); }
+
 function tag2FN(tagName) { return (initial, ...args) => tagFN(tagName, initial, ...args); }
