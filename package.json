@@ -1,6 +1,6 @@
 {
   "name": "tinydom-es",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Dynamically create HTML elements using tag names as functions",
   "keywords": [
     "HTML",
