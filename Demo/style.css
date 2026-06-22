@@ -108,10 +108,9 @@
     code:not(.language-javascript) {
       background-color: hsl(210, 8%, 90%);
       color: hsl(210, 8%, 5%);
-      padding: 2px 1px;
+      padding: 0 1px;
       display: inline-block;
       border-radius: 4px;
-      margin: 1px 0;
     }
   }
 }
