@@ -3,18 +3,21 @@ import $T from "../tinyDOM.js";
 addHandler();
 demo();
 createCodeDetails();
-window.$T = $T;
 createCopyrightComponent();
+$T.img({src: "https://sdn.nicon.nl/px0_git-tinyDOM-demo.png"});
 
 function demo() {
   // imported with
   // import $T from "../tinyDOM.js";
   // ------------------------------------------------
   // create custom error function
-  $T.setError = key => $T.b(
-    {style: "color: red"},
-    $T.code(key), " is ",
-    $T.i("not"), " a valid HTML tag");
+  $T.setError = key => $T.span(
+    $T.b(
+      {style: "color: red", id: "tagErrorMessage"},
+      $T.code(key), " is ",
+      $T.i("not"), " a valid HTML tag"
+    )
+  );
   
   // destructure some relevant tag functions
   const { H3, DIV, A, CODE, DETAILS, SUMMARY, P, p, I, B, NOTHING, } = $T;
@@ -81,9 +84,13 @@ function demo() {
   // so, let's append them to the body of the DOM tree
   document.body.append(
     $T.comment(`hello, this is a comment`),
-    DIV( {class: "container"},
+    DIV(
+      {class: "container"},
       DIV( {class: "content"},
-        DETAILS({open: true}, SUMMARY("<span>About</span>"), aboutContent),
+        DETAILS(
+          {open: true}, SUMMARY("<span>About</span>"),
+          aboutContent
+        ),
         DIV(
           {id: "NameDiv"},
           H3({data: {name: "Mary POC Demo"}}),
