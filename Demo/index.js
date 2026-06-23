@@ -5,6 +5,7 @@ demo();
 createCodeDetails();
 createCopyrightComponent();
 $T.img({src: "https://sdn.nicon.nl/px0_git-tinyDOM-demo.png"});
+window.$T = $T;
 
 function demo() {
   // imported with
