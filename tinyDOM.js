@@ -83,6 +83,7 @@ function retrieveElementFromInitial(initial, tag) {
 
 function cleanupProps(props) {
   delete props.data;
+  delete props.attributes;
   if ( Object.keys(props).length < 1 ) { return props; }
   
   Object.keys(props).forEach( key => {
@@ -100,10 +101,12 @@ function createElementAndAppend(tag, element2Append) {
 function createElement(tagName, props = {}) {
   props = isObjectCheck(props, {});
   const data = Object.entries(props.data ?? {});
+  const attributes = Object.entries(props.attributes ?? {});
   const elem = Object.assign(
     isComment(tagName) ? new Comment() : document.createElement(tagName),
     cleanupProps( props ) );
   data.length && data.forEach(([key, value]) => elem.dataset[key] = value);
+  attributes.length && attributes.forEach( ([key, value]) => elem.setAttribute(key, value) );
   return elem;
 }
 
