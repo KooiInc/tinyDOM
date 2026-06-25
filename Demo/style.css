@@ -8,6 +8,14 @@
     margin: 0 auto;
     padding: 2rem;
 
+    li {
+      margin: 0.5rem -1em;
+    }
+
+    .htmlResult {
+      color: red;
+    }
+
     & [data-action] {
       color: blue;
       cursor: pointer;

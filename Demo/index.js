@@ -23,7 +23,7 @@ function demo() {
   // destructure some relevant tag functions
   const { H3, DIV, A, CODE, DETAILS, SUMMARY, P, p, I, B, NOTHING, } = $T;
   const revealCodeLink = text => I({data: {action: "revealCode"}, text});
-  const printHTML = elem => elem.outerHTML.replace(/</g, "&lt;");
+  const printHTML = elem => $T.span({class: `htmlResult`}, elem.outerHTML.replace(/</g, "&lt;"));
   const jqlLink = A({
     target: "_blank",
     class: "linkJQL",
@@ -37,25 +37,30 @@ function demo() {
       DIV("This small <i>library</i> offers a way to dynamically create (nested) HTML elements\
          by converting tag names (<code>div</code> <code>table</code> etc.)\
          to element creation functions ('", I("tag functions"), "')."),
-      DIV("Some examples (the default library export was imported as ", CODE("$T"), ")"),
+      DIV("Some examples (the default module export was imported as ", CODE("$T"), ")"),
       $T.UL(
         $T.li($T.code("$T.div('Hello world')"),
           " => ", printHTML($T.div("Hello world")) ),
+        
         $T.li(
           $T.div({class: `noMargin`}, `Include <code>data-* attributes</code>`),
-          $T.code("$T.p({class: 'helloworld', data: {world: ' World'}}, 'Hello')"),
+          $T.code("$T.p({class: 'hello world', data: {world: ' World'}}, 'Hello')"),
           " =>", $T.br(),
-          printHTML($T.p({class: 'helloworld', data: {world: ' World'}}, 'Hello')) ),
+          printHTML($T.p({class: 'hello world', data: {world: ' World'}}, 'Hello')) ),
+        
         $T.li(
           $T.div({class: `noMargin`}, "Include attributes that are not reflected " +
             "(can't be set using [element][attribute] = \"...\")"),
           $T.code(`$T.div({attributes: {is: "my-customized-ul"}}, "hello WRLD")`), ` =>`,
           $T.br(),
           printHTML($T.div({attributes: {is: "my-customized-ul"}}, "hello WRLD"))),
+        
         $T.li($T.code("$T.span({text: 'Hello world'})"),
           " => ", printHTML($T.span({text: 'Hello world'})) ),
+        
         $T.li("<code>$T.P('hello &lt;i>world&lt;/i>')</code>",
           " => ", printHTML($T.P("hello <i>world</i>")) ),
+        
         $T.li($T.div({class: `noMargin`}, "Destructured:"),
           $T.CODE("const {p, P} = $T; p('hello world')"),
           " => ", printHTML(p("hello world")) ),
