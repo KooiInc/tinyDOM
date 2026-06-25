@@ -132,8 +132,28 @@ function createCodeDetails() {
   Prism.highlightAll();
 }
 
-// custom autonomous element (web component)
-// see https://github.com/KooiInc/es-webcomponent-factory
+/* custom autonomous element (web component)
+   see https://github.com/KooiInc/es-webcomponent-factory
+   
+   if you want to create a customized element (so: not autonomous)
+   use
+   
+     CreateComponent( { componentName:string, onConnect:method, extends:string } );
+   
+   where extends reflects html tag string (e.g. DIV, p, ul)
+   
+   To render such an element, e.g. an extended 'div', create the element
+   with tinyDOM, for example:
+   
+   const myElement = $T.div(
+     {attributes: {is: "my-element"}}, // <= 'is' MUST be declared as attribute
+     $T.span({slot: "mySlot"}, [slot content]),
+   );
+  
+   // The element can not be appended directly (it will not trigger the onConnect method)
+   // so use insertAdjacentHTML and the outerHTML of the created customized element
+   document.body.insertAdjacentHTML(`afterbegin`, myElement.outerHTML);
+ */
 function createCopyrightComponent() {
   CreateComponent( { componentName: `copyright-slotted`, onConnect: copyrightComponentConnectHandler });
   renderCopyrightComponent();
