@@ -41,9 +41,17 @@ function demo() {
       $T.UL(
         $T.li($T.code("$T.div('Hello world')"),
           " => ", printHTML($T.div("Hello world")) ),
-        $T.li($T.code("$T.p({class: 'helloworld', data: {world: ' World'}}, 'Hello')"),
+        $T.li(
+          $T.div({class: `noMargin`}, `Include <code>data-* attributes</code>`),
+          $T.code("$T.p({class: 'helloworld', data: {world: ' World'}}, 'Hello')"),
           " =>", $T.br(),
           printHTML($T.p({class: 'helloworld', data: {world: ' World'}}, 'Hello')) ),
+        $T.li(
+          $T.div({class: `noMargin`}, "Include attributes that are not reflected " +
+            "(can't be set using [element][attribute] = \"...\")"),
+          $T.code(`$T.div({attributes: {is: "my-customized-ul"}}, "hello WRLD")`), ` =>`,
+          $T.br(),
+          printHTML($T.div({attributes: {is: "my-customized-ul"}}, "hello WRLD"))),
         $T.li($T.code("$T.span({text: 'Hello world'})"),
           " => ", printHTML($T.span({text: 'Hello world'})) ),
         $T.li("<code>$T.P('hello &lt;i>world&lt;/i>')</code>",
