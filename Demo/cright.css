@@ -1,5 +1,5 @@
 :host {
-  font: 14px/22px system-ui, verdana, arial, sans-serif;
+  font: 14px/1.5em system-ui, verdana, arial, sans-serif;
   color: #555;
   display: inline-block;
   position: fixed;
@@ -9,24 +9,43 @@
   height: 22px;
   transform: translateX(-50%);
   z-index: 2;
-  border-radius: 4px;
   padding: 2px 0;
   width: 100vw;
   text-align: center;
   box-shadow: 0 2px 14px #999;
 
-  .backlink {
-    font-weight: bold;
-    color: rgb(0, 0, 238);
+  &::slotted(slot) {
+    display: inline;
   }
 
-  ::slotted(.yr) {
+  ::slotted([slot="year"]) {
     font-weight: bold;
     color: green;
   }
 
-  ::slotted(a) {
+  ::slotted([slot="year"]):before {
+    content: "© ";
+    color: #555;
+    font-size: 1.2em;
+    padding-right: 0.2em;
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  ::slotted([slot="year"]):after {
+    content: " KooiInc |";
+    color: #555;
+    font-weight: normal;
+    font-style: italic;
+  }
+
+  ::slotted([slot="link"]) {
     font-weight: bold;
     text-decoration: none;
+  }
+
+  ::slotted([slot="link"]):before {
+    content: " ↺ ";
+    color: rgb(0, 0, 238);
   }
 }

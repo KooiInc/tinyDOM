@@ -140,15 +140,14 @@ function createCopyrightComponent() {
 }
 
 function renderCopyrightComponent() {
-  const {copyrightSlotted} = $T;
   const ghLink = $T.a({
       slot: `link`,
       href: `//github.com/KooiInc/tinyDOM`,
       target: `_top`,
       text: ` Back to repository`});
   document.body.insertAdjacentElement( `afterbegin`,
-    copyrightSlotted(
-      $T.span({slot: `year`, class: `yr`, text: String(new Date().getFullYear())}),
+    $T.copyrightSlotted(
+      $T.span({slot: `year`, text: String(new Date().getFullYear())}),
       ghLink,
     )
   );
@@ -157,7 +156,10 @@ function renderCopyrightComponent() {
 function copyrightComponentConnectHandler(elem) {
   const shadow = createOrRetrieveShadowRoot(elem);
   const componentStyle = $T.style({textContent: `@import url(./cright.css)`});
-  const content = $T.div({html: `&copy; <span><slot name="year"></slot></span> KooiInc
-    | <span class="backlink">↺</span> <slot name="link"/>`});
-  shadow.append(content, componentStyle);
+  shadow.append(componentStyle,
+    $T.div(
+      $T.slot({name: "year"}),
+      $T.slot({name: "link"})
+    )
+  );
 }
