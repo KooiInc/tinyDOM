@@ -11,7 +11,7 @@ function demo() {
   // imported with
   // import $T from "../tinyDOM.js";
   // ------------------------------------------------
-  // create custom error function
+  // create custom error function for invalid tagNames
   $T.setError = key => $T.span(
     $T.b(
       {style: "color: red", id: "tagErrorMessage"},
@@ -44,9 +44,9 @@ function demo() {
         
         $T.li(
           $T.div({class: `noMargin`}, `Include <code>data-* attributes</code>`),
-          $T.code("$T.p({class: 'hello world', data: {world: ' World'}}, 'Hello')"),
+          $T.code("$T.p({class: 'hello, world', data: {world: ' World'}}, 'Hello')"),
           " =>", $T.br(),
-          printHTML($T.p({class: 'hello world', data: {world: ' World'}}, 'Hello')) ),
+          printHTML($T.p({class: 'hello, world', data: {world: ' World'}}, 'Hello')) ),
         
         $T.li(
           $T.div({class: `noMargin`}, "Include attributes that are not reflected " +
@@ -73,8 +73,9 @@ function demo() {
           within the created element. It may be strings, other HTML elements\
           created plainly or using tinyDOM tag functions.\
           Strings can be plain text or HTML."),
-      DIV("Invalid tagnames will be converted to a function returning nothing by\
-        default. The 'error'-function may be re-assigned, e.g. to a function returning\
+      DIV("Invalid tagnames will be converted to a function returning nothing (<code>undefined</code>) \
+        by default, whilst reporting an error message in the console. \
+        The 'error'-function may be re-assigned, e.g. to a function returning\
         an element containing an error message, or a function reporting an error\
         in the console. Use the setter ",
         DIV({class: `codeCenter`}, "<code>$T.setError = function([key]) {return ...})</code>"),
