@@ -7,15 +7,22 @@
 This small *library* offers a way to dynamically create HTML elements
 using tag names as functions.
 
-Check the [demonstration page](https://kooiinc.github.io/tinyDOM/Demo) to learn how it works.
-
 ### Details
+
 - The library uses a `Proxy`, so the element functions are *lazy loaded* (on demand).
-- address the `className` property as `{class: ...}`
+- Tag function names are *case insensitive*  
+  (e.g. `tags.DIV` or `tags.div`, `const {h3, H3, DIV, p, P} = tags`)
+
+The first parameter of a tag function may be an Object literal,
+containing textContent / innerHTML /   
+[reflected element properties](https://javascript.plainenglish.io/html-properties-vs-attributes-7b3ab0db532b) / (data-)attributes.
+
+- address the `className` property as `{class: 'class1 class2 ...'}`
+- address `attributes` as `{attributes: {attr1: '...', ...}`
 - address `data-attributes` as `{data: {one: '...', ...}}`
 - address `innerHTML/textContent` as `{html: ...}` or `{text: ...}`
-- tag function names are *case insensitive*
-  (e.g. `tags.DIV` or `tags.div`, `const {h3, H3, DIV, p, P} = tags`)
+
+Check the [demonstration page](https://kooiinc.github.io/tinyDOM/Demo) to learn more.
 
 Enjoy!
 
