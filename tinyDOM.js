@@ -1,7 +1,10 @@
 import { default as IS, maybe, } from "https://unpkg.com/typeofanything@latest/Dist/toa.min.js";
 const converts = { html: `innerHTML`, text: `textContent`,  class: `className` };
 let elementFunctionCollection = {};
-let error = _ => null;
+let error = tag => {
+  console.error(`tinyDOM error: "${tag}" is not a valid HTML tag`);
+  return undefined;
+};
 
 export default tinyDOM();
 
@@ -31,19 +34,19 @@ function getProxy() {
 }
 
 function createTagFunctionProperty({tag, key, tagRaw, isError = false} = {}) {
-  let writableClone = cloneExact();
+  let unfrozenElementFunctionCollection = cloneExact();
   
   if (tagRaw) {
-    Object.defineProperty(writableClone, tagRaw, {
+    Object.defineProperty(unfrozenElementFunctionCollection, tagRaw, {
       get() { return isError ? _ => error(key) ?? `` : tag2FN(tag); }
     } );
   }
   
-  Object.defineProperty(writableClone, tag, {
+  Object.defineProperty(unfrozenElementFunctionCollection, tag, {
     get() { return isError ? _ => error(key) ?? `` : tag2FN(tag); }
   } );
   
-  return reFreeze(writableClone, tagRaw ?? tag);
+  return reFreeze(unfrozenElementFunctionCollection, tagRaw ?? tag);
 }
 
 function reFreeze(writableClone, tag) {
@@ -81,32 +84,52 @@ function retrieveElementFromInitial(initial, tag) {
   }
 }
 
-function cleanupProps(props) {
-  delete props.data;
-  delete props.attributes;
-  if ( Object.keys(props).length < 1 ) { return props; }
-  
-  Object.keys(props).forEach( key => {
-    const keyCI = key.toLowerCase();
-    keyCI in converts && (props[converts[keyCI]] = props[key]) && delete props[key]; } );
-  return props;
-}
-
 function createElementAndAppend(tag, element2Append) {
   const elem = createElement(tag);
   elem.append(element2Append);
   return elem;
 }
 
-function createElement(tagName, props = {}) {
-  props = isObjectCheck(props, {});
+function cleanupProps(props) {
+  if ( Object.keys(props).length < 1 ) { return {assignable: {}, specials: [...Array(3)] }; }
+  
+  const specials = retrieveSpecialProps(props);
+  Object.keys(props).forEach( key => {
+    const keyCI = key.toLowerCase();
+    keyCI in converts && (props[converts[keyCI]] = props[key]) && delete props[key]; } );
+  
+  return { assignable: props, specials };
+}
+
+function retrieveSpecialProps(props) {
+  if (!IS(props, Object)) { return Array(3); }
+  
   const data = Object.entries(props.data ?? {});
   const attributes = Object.entries(props.attributes ?? {});
+  const classList = props.class?.split(/[ ,]/).map(v => v.trim()).filter(v => v.length > 1);
+  delete props.data;
+  delete props.attributes;
+  delete props.class;
+  
+  return [data, attributes, classList];
+}
+
+function assignSpecialProps(specialProps, element) {
+  const [data, attributes, classList] = specialProps;
+  
+  data?.length && data.forEach(([key, value]) => element.dataset[key] = value);
+  attributes?.length && attributes.forEach( ([key, value]) => element.setAttribute(key, value) );
+  classList?.forEach( value => element.classList.add(value));
+}
+
+function createElement(tagName, props = {}) {
+  const {assignable, specials} = cleanupProps(props);
   const elem = Object.assign(
     isComment(tagName) ? new Comment() : document.createElement(tagName),
-    cleanupProps( props ) );
-  data.length && data.forEach(([key, value]) => elem.dataset[key] = value);
-  attributes.length && attributes.forEach( ([key, value]) => elem.setAttribute(key, value) );
+    assignable
+  );
+  assignSpecialProps(specials, elem);
+  
   return elem;
 }
 
