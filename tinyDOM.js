@@ -28,7 +28,7 @@ function getProxy() {
     },
     set(tagFns, key, value) {
         if (key === `setError` && typeof value === 'function') { error = value; }
-        if (key === `addCustomElement` && typeof value === 'string' &&
+        if (key === `newCustomElement` && typeof value === 'string' &&
               (value.includes(`-`) || /([a-z][A-Z])/.test(value))) {
           registerCustomElement(value);
         }
