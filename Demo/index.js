@@ -25,8 +25,6 @@ function demo() {
   
   // destructure some relevant tag functions
   const { H3, DIV, A, CODE, DETAILS, SUMMARY, P, p, I, B, NOTHING, } = $T;
-  const revealCodeLink = text => I({data: {action: "revealCode"}, text});
-  const printHTML = elem => $T.span({class: `htmlResult`}, elem.outerHTML.replace(/</g, "&lt;"));
   const jqlLink = A({
     target: "_blank",
     class: "linkJQL",
@@ -76,7 +74,8 @@ function demo() {
           within the created element. It may be strings, other HTML elements\
           created plainly or using tinyDOM tag functions.\
           Strings can be plain text or HTML."),
-      DIV("Invalid tagnames will be converted to a function returning nothing (<code>undefined</code>) \
+      DIV("Invalid tagnames will be converted to a function returning nothing \
+        (<code>undefined</code>) \
         by default, whilst reporting an error message in the console. \
         The 'error'-function may be re-assigned, e.g. to a function returning\
         an element containing an error message, or a function reporting an error\
@@ -92,14 +91,15 @@ function demo() {
         "It is created using ",
         DIV(
           {class: `codeBlock`},
-          $T.code(toCodeCommentSpan(
+          $T.code(toCodeWithMaybeCommentSpan(
             `$T.newCustomElement = "copyright-slotted";\n` +
             `// OR $T.newCustomElement = "copyrightSlotted";\n` +
             `$T["copyright-slotted"](...);`))
         ),
-        `The setter takes either a snake-cased or a camel cased string value.
-        One value will result in the availability of two tag functions:
-        <code>$T["copyright-slotted"]</code> and <code>$T.copyrightSlotted</code>.`),
+        `The setter takes either a snake-cased or a camel cased string value.`),
+        DIV(`Setting a (valid) value will result in the availability of two tag functions.
+          In case of the top bar component:
+          <code>$T["copyright-slotted"]</code> and <code>$T.copyrightSlotted</code>.`),
       DIV("The library uses a ", CODE("Proxy"),
         ", so every tag function is <i>lazy loaded</i> (on demand)."),
       DIV("The library is included an used in ", jqlLink, $T.SPAN(` (a jQuery alike module).`) ),
@@ -214,7 +214,10 @@ function copyrightComponentConnectHandler(elem) {
   );
 }
 
-function toCodeCommentSpan(commentText) {
+function toCodeWithMaybeCommentSpan(commentText) {
   return `${commentText}`.replace(/\/\*(?:[^*]|\*+[^*\/])*\*+\/|(?<!:|\\\|')\/\/.*/gm, a =>
     `<span class="comment">${a}</span>`);
 }
+
+function revealCodeLink(text) { return $T.I({data: {action: "revealCode"}, text}); }
+function printHTML(elem) { return $T.span({class: `htmlResult`}, elem.outerHTML.replace(/</g, "&lt;")); }
