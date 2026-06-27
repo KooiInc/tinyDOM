@@ -1,11 +1,14 @@
 import {default as CreateComponent, createOrRetrieveShadowRoot} from "./es-webcomponent-bundle.js";
 import $T from "../tinyDOM.js";
+
 addHandler();
 demo();
 createCodeDetails();
 createCopyrightComponent();
 $T.img({src: "https://sdn.nicon.nl/px0_git-tinyDOM-demo.png"});
 window.$T = $T;
+const [is, type] = [Symbol.for.is, Symbol.for.type];
+window.is = is;
 
 function demo() {
   // imported with

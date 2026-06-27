@@ -1,10 +1,13 @@
-import { default as IS, maybe, } from "https://unpkg.com/typeofanything@latest/Dist/toa.min.js";
+import { maybe, addSymbolicExtensions, xProxy } from "https://unpkg.com/typeofanything@latest/Dist/toa.min.js";
 const converts = { html: `innerHTML`, text: `textContent`,  class: `className` };
 let elementFunctionCollection = {};
 let error = tag => {
   console.error(`tinyDOM error: "${tag}" is not a valid HTML tag`);
   return undefined;
 };
+
+xProxy.custom();
+addSymbolicExtensions();
 
 export default tinyDOM();
 
@@ -49,8 +52,9 @@ function createTagFunctionProperty({tag, key, tagRaw, isError = false} = {}) {
   return reFreeze(unfrozenElementFunctionCollection, tagRaw ?? tag);
 }
 
-function reFreeze(writableClone, tag) {
-  elementFunctionCollection = Object.freeze(new Proxy(writableClone, getProxy()));
+function reFreeze(unfrozenCollection, tag) {
+  elementFunctionCollection = Object.freeze(new Proxy(unfrozenCollection, getProxy()));
+  elementFunctionCollection[Symbol.for.proxy] = `Proxy (Object)`;
   return elementFunctionCollection[tag];
 }
 
@@ -78,8 +82,8 @@ function retrieveElementFromInitial(initial, tag) {
   initial = isComment(tag) ? cleanupComment(initial) : initial;
   
   switch(true) {
-    case IS(initial, String): return createElement(tag, containsHTML(initial, tag) ? {html: initial} : {text: initial});
-    case IS(initial, Node): return createElementAndAppend(tag, initial);
+    case initial?.[Symbol.is](String): return createElement(tag, containsHTML(initial, tag) ? {html: initial} : {text: initial});
+    case initial?.[Symbol.is](Node): return createElementAndAppend(tag, initial);
     default: return createElement(tag, initial);
   }
 }
@@ -102,7 +106,7 @@ function cleanupProps(props) {
 }
 
 function retrieveSpecialProps(props) {
-  if (!IS(props, Object)) { return Array(3); }
+  if (!props?.[Symbol.is](Object)) { return Array(3); }
   
   const data = Object.entries(props.data ?? {});
   const attributes = Object.entries(props.attributes ?? {});
@@ -135,8 +139,8 @@ function createElement(tagName, props = {}) {
 
 function isObjectCheck(someObject, defaultValue) {
   return defaultValue
-    ? IS(someObject, {isTypes: Object, notTypes: [Array, null, NaN, Proxy], defaultValue})
-    : IS(someObject, {isTypes: Object, notTypes: [Array, null, NaN, Proxy]});
+    ? someObject?.[Symbol.is]({isTypes: Object, notTypes: [Array, null, NaN, Proxy], defaultValue})
+    : someObject?.[Symbol.is]({isTypes: Object, notTypes: [Array, null, NaN, Proxy]});
 }
 
 function toDashedNotation(str2Convert) {
@@ -148,11 +152,11 @@ function cleanupComment(initial) {
 }
 
 function containsHTML(str, tag) {
-  return !isComment(tag) && IS(str, String) && /<.*>|&[#|0-9a-z]+[^;];/i.test(str);
+  return !isComment(tag) && str?.[Symbol.is](String) && /<.*>|&[#|0-9a-z]+[^;];/i.test(str);
 }
 
 function isComment(tag) { return /comment/i.test(tag); }
 
-function validateTag(name) { return !IS(createElement(name), HTMLUnknownElement); }
+function validateTag(name) { return !createElement(name)?.[Symbol.is](HTMLUnknownElement); }
 
 function tag2FN(tagName) { return (initial, ...args) => tagFN(tagName, initial, ...args); }
