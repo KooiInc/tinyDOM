@@ -95,8 +95,14 @@ function demo() {
             `$T.newCustomElement = "copyright-slotted";\n` +
             `// OR $T.newCustomElement = "copyrightSlotted";\n` +
             `$T["copyright-slotted"](...);`))
-        ),
-        `The setter takes either a snake-cased or a camel cased string value.`),
+          ),
+        `The setter takes either a `,
+        $T.a({
+          href: "https://basicfreetools.com/blog/text-case-conventions-explained/",
+          target: "_blank",
+          textContent: "snake- or camel cased"
+        }),
+        ` string value.`),
         DIV(`Setting a (valid) value will result in the availability of two tag functions.
           In case of the top bar component:
           <code>$T["copyright-slotted"]</code> and <code>$T.copyrightSlotted</code>.`),
