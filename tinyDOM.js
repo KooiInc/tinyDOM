@@ -28,14 +28,20 @@ function getProxy() {
     },
     set(tagFns, key, value) {
         if (key === `setError` && typeof value === 'function') { error = value; }
-        if (key === `newCustomElement` && typeof value === 'string' &&
-              (value.includes(`-`) || /([a-z][A-Z])/.test(value))) {
+        if (key === `newCustomElement` && validateCustomElementTag(value)) {
           registerCustomElement(value);
         }
         return true;
       },
     enumerable: false, configurable: false
   };
+}
+
+function validateCustomElementTag(tagName) {
+  return typeof tagName === `string` &&
+    tagName.length > 2 &&
+    /[_a-zA-Z]/gi.test(tagName) &&
+    (tagName.includes(`-`) || /([a-z][A-Z])+/.test(tagName));
 }
 
 function registerCustomElement(value) {
