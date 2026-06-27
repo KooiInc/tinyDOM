@@ -16,6 +16,10 @@
       color: red;
     }
 
+    .comment {
+      color: #999;
+    }
+
     & [data-action] {
       color: blue;
       cursor: pointer;
@@ -38,6 +42,15 @@
           text-align: center;
           border: 1px dotted #999;
           padding: 5px;
+          background-color: hsl(210, 8%, 90%);
+        }
+
+        &.codeBlock {
+          margin: 0.5em 0;
+          text-align: left;
+          border: 1px dotted #999;
+          padding: 5px 15px;
+          white-space: break-spaces;
           background-color: hsl(210, 8%, 90%);
         }
 

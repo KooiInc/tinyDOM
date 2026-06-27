@@ -1,19 +1,19 @@
 import {default as CreateComponent, createOrRetrieveShadowRoot} from "./es-webcomponent-bundle.js";
 import $T from "../tinyDOM.js";
-
 addHandler();
 demo();
 createCodeDetails();
 createCopyrightComponent();
 $T.img({src: "https://sdn.nicon.nl/px0_git-tinyDOM-demo.png"});
 window.$T = $T;
-const [is, type] = [Symbol.for.is, Symbol.for.type];
-window.is = is;
 
 function demo() {
   // imported with
   // import $T from "../tinyDOM.js";
   // ------------------------------------------------
+  // trigger an error in the console (default error function)
+  $T.iAmNotReal("Or Am I?");
+  
   // create custom error function for invalid tagNames
   $T.setError = key => $T.span(
     $T.b(
@@ -81,15 +81,25 @@ function demo() {
         The 'error'-function may be re-assigned, e.g. to a function returning\
         an element containing an error message, or a function reporting an error\
         in the console. Use the setter ",
-        DIV({class: `codeCenter`}, "<code>$T.setError = function([key]) {return ...})</code>"),
-        "for that. See ", CODE("NOTHING()"), " in the ",
+        "<code>$T.setError = function([key]) {return ...})</code>",
+        " for that. See ", CODE("NOTHING()"), " in the ",
         revealCodeLink("example code")
       ),
-      $T.div("Autonomous custom elements can also be used. The top bar of this demonstration " +
+      $T.div("(Autonomous) <i>custom elements</i> can also be used. \
+        They have to be registered with a setter called <code>newCustomElement</code> ",
+        "The top bar of this demonstration " +
         "page is a small web component: <code>&lt;copyright-slotted&gt;</code>. " +
         "It is created using ",
-        $T.code('$T["copyright-slotted"](...)'), ", which can also be ",
-        $T.code('$T.copyrightSlotted(...)'), `.`),
+        DIV(
+          {class: `codeBlock`},
+          $T.code(toCodeCommentSpan(
+            `$T.newCustomElement = "copyright-slotted";\n` +
+            `// OR $T.newCustomElement = "copyrightSlotted";\n` +
+            `$T["copyright-slotted"](...);`))
+        ),
+        `The setter takes either a snake-cased or a camel cased string value.
+        One value will result in the availability of two tag functions:
+        <code>$T["copyright-slotted"]</code> and <code>$T.copyrightSlotted</code>.`),
       DIV("The library uses a ", CODE("Proxy"),
         ", so every tag function is <i>lazy loaded</i> (on demand)."),
       DIV("The library is included an used in ", jqlLink, $T.SPAN(` (a jQuery alike module).`) ),
@@ -173,6 +183,7 @@ function createCodeDetails() {
    document.body.insertAdjacentHTML(`afterbegin`, myElement.outerHTML);
  */
 function createCopyrightComponent() {
+  $T.newCustomElement = `copyrightSlotted`;
   CreateComponent( { componentName: `copyright-slotted`, onConnect: copyrightComponentConnectHandler });
   renderCopyrightComponent();
 }
@@ -201,4 +212,9 @@ function copyrightComponentConnectHandler(elem) {
       $T.slot({name: "link"})
     )
   );
+}
+
+function toCodeCommentSpan(commentText) {
+  return `${commentText}`.replace(/\/\*(?:[^*]|\*+[^*\/])*\*+\/|(?<!:|\\\|')\/\/.*/gm, a =>
+    `<span class="comment">${a}</span>`);
 }
