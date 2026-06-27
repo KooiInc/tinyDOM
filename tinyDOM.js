@@ -137,18 +137,12 @@ function createElement(tagName, props = {}) {
   return elem;
 }
 
-function isObjectCheck(someObject, defaultValue) {
-  return defaultValue
-    ? someObject?.[Symbol.is]({isTypes: Object, notTypes: [Array, null, NaN, Proxy], defaultValue})
-    : someObject?.[Symbol.is]({isTypes: Object, notTypes: [Array, null, NaN, Proxy]});
-}
-
 function toDashedNotation(str2Convert) {
   return str2Convert.replace(/[A-Z]/g, a => `-${a.toLowerCase()}`).replace(/^-|-$/, ``);
 }
 
 function cleanupComment(initial) {
-  return isObjectCheck(initial) ? initial?.text ?? initial?.textContent ?? `` : String(initial);
+  return initial?.constructor === Comment ? initial?.textContent : String(initial);
 }
 
 function containsHTML(str, tag) {

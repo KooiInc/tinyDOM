@@ -100,7 +100,8 @@ function demo() {
   
   // the elements until now only exist in memory
   // so, let's append them to the body of the DOM tree
-  document.body.append(
+  document.body.prepend(
+    // a comment (see console/Elements)
     $T.comment(`hello, this is a comment`),
     DIV(
       {class: "container"},
@@ -182,7 +183,8 @@ function renderCopyrightComponent() {
       href: `//github.com/KooiInc/tinyDOM`,
       target: `_top`,
       text: ` Back to repository`});
-  document.body.insertAdjacentElement( `afterbegin`,
+  document.body.insertAdjacentElement(
+    `beforeend`,
     $T.copyrightSlotted(
       $T.span({slot: `year`, text: String(new Date().getFullYear())}),
       ghLink,
