@@ -1,8 +1,8 @@
 import { maybe, addSymbolicExtensions } from "https://unpkg.com/typeofanything@latest/Dist/toa.min.js";
 const converts = { html: `innerHTML`, text: `textContent`,  class: `className` };
 let elementFunctionCollection = {};
-let customElementRegistry = {};
-let error = tag => {
+const customElementRegistry = {};
+let tagFunctionError = tag => {
   console.error(`tinyDOM error: "${tag}" is not a valid HTML tag`);
   return undefined;
 };
@@ -27,7 +27,7 @@ function getProxy() {
       }
     },
     set(tagFns, key, value) {
-        if (key === `setError` && typeof value === 'function') { error = value; }
+        if (key === `setError` && typeof value === 'function') { tagFunctionError = value; }
         if (key === `newCustomElement` && validateCustomElementTag(value)) {
           registerCustomElement(value);
         }
@@ -45,7 +45,7 @@ function validateCustomElementTag(tagName) {
 }
 
 function registerCustomElement(value) {
-  const [dashed, camel] = value.includes(`-`) ? [value, toCamelcase(value)] : [toDashedNotation(value), value]
+  const [dashed, camel] = value.includes(`-`) ? [value, toCamelcase(value)] : [toDashedNotation(value), value];
   customElementRegistry[dashed] = dashed;
   customElementRegistry[camel] = dashed;
   createTagFunctionProperty({tag: dashed, custom: camel, debug: true});
@@ -54,14 +54,14 @@ function registerCustomElement(value) {
 function createTagFunctionProperty({tag, key, custom, debug = false, isError = false} = {}) {
   let unfrozenElementFunctionCollection = cloneExact();
   
-  if (custom) {
+  if (!!custom) {
     Object.defineProperty(unfrozenElementFunctionCollection, custom, {
-      get() { return isError ? _ => error(key) ?? `` : tag2FN(custom); }
+      get() { return isError ? _ => tagFunctionError(key) ?? `` : tag2FN(custom); }
     })
   }
   
   Object.defineProperty(unfrozenElementFunctionCollection, tag, {
-    get() { return isError ? _ => error(key) ?? `` : tag2FN(tag); }
+    get() { return isError ? _ => tagFunctionError(key) ?? `` : tag2FN(tag); }
   } );
   
   return reFreeze(unfrozenElementFunctionCollection, tag);
