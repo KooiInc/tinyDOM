@@ -1,6 +1,7 @@
 import { maybe, addSymbolicExtensions } from "https://unpkg.com/typeofanything@latest/Dist/toa.min.js";
 const converts = { html: `innerHTML`, text: `textContent`,  class: `className` };
 let elementFunctionCollection = {};
+let customElementRegistry = {};
 let error = tag => {
   console.error(`tinyDOM error: "${tag}" is not a valid HTML tag`);
   return undefined;
@@ -17,38 +18,47 @@ function tinyDOM() {
 function getProxy() {
   return {
     get(tagFns, key) {
-      const tagRaw = String(key);
-      const isAutonomousCustom = tagRaw.includes(`-`) || /([a-z][A-Z])/.test(tagRaw);
-      const tag = isAutonomousCustom ? toDashedNotation(tagRaw) : String(key)?.toLowerCase();
+      const tag = String(key);
       
       switch(true) {
         case tag in tagFns: return tagFns[tag];
-        case validateTag(tag): return createTagFunctionProperty({tag, tagRaw: isAutonomousCustom ? tagRaw : undefined, key});
+        case validateTag(tag): return createTagFunctionProperty({tag, key});
         default: return createTagFunctionProperty({tag, key, isError: true});
       }
     },
     set(tagFns, key, value) {
-      if (key === `setError` && typeof value === 'function') { error = value; }
-      return true;
-    },
+        if (key === `setError` && typeof value === 'function') { error = value; }
+        if (key === `addCustomElement` && typeof value === 'string' &&
+              (value.includes(`-`) || /([a-z][A-Z])/.test(value))) {
+          registerCustomElement(value);
+        }
+        return true;
+      },
     enumerable: false, configurable: false
   };
 }
 
-function createTagFunctionProperty({tag, key, tagRaw, isError = false} = {}) {
+function registerCustomElement(value) {
+  const [dashed, camel] = value.includes(`-`) ? [value, toCamelcase(value)] : [toDashedNotation(value), value]
+  customElementRegistry[dashed] = dashed;
+  customElementRegistry[camel] = dashed;
+  createTagFunctionProperty({tag: dashed, custom: camel, debug: true});
+}
+
+function createTagFunctionProperty({tag, key, custom, debug = false, isError = false} = {}) {
   let unfrozenElementFunctionCollection = cloneExact();
   
-  if (tagRaw) {
-    Object.defineProperty(unfrozenElementFunctionCollection, tagRaw, {
-      get() { return isError ? _ => error(key) ?? `` : tag2FN(tag); }
-    } );
+  if (custom) {
+    Object.defineProperty(unfrozenElementFunctionCollection, custom, {
+      get() { return isError ? _ => error(key) ?? `` : tag2FN(custom); }
+    })
   }
   
   Object.defineProperty(unfrozenElementFunctionCollection, tag, {
     get() { return isError ? _ => error(key) ?? `` : tag2FN(tag); }
   } );
   
-  return reFreeze(unfrozenElementFunctionCollection, tagRaw ?? tag);
+  return reFreeze(unfrozenElementFunctionCollection, tag);
 }
 
 function reFreeze(unfrozenCollection, tag) {
@@ -125,7 +135,8 @@ function assignSpecialProps(specialProps, element) {
   classList?.forEach( value => element.classList.add(value));
 }
 
-function createElement(tagName, props = {}) {
+function createElement(tagName, props) {
+  props = props || {};
   const {assignable, specials} = cleanupProps(props);
   const elem = Object.assign(
     isComment(tagName) ? new Comment() : document.createElement(tagName),
@@ -136,9 +147,6 @@ function createElement(tagName, props = {}) {
   return elem;
 }
 
-function toDashedNotation(str2Convert) {
-  return str2Convert.replace(/[A-Z]/g, a => `-${a.toLowerCase()}`).replace(/^-|-$/, ``);
-}
 
 function cleanupComment(initial) {
   return initial?.constructor === Comment ? initial?.textContent : String(initial);
@@ -150,6 +158,24 @@ function containsHTML(str, tag) {
 
 function isComment(tag) { return /comment/i.test(tag); }
 
-function validateTag(name) { return !createElement(name)?.[Symbol.is](HTMLUnknownElement); }
+function validateTag(name) { return name in customElementRegistry || !createElement(name)?.[Symbol.is](HTMLUnknownElement); }
 
-function tag2FN(tagName) { return (initial, ...args) => tagFN(tagName, initial, ...args); }
+function tag2FN(tagName) {
+  tagName = tagName in customElementRegistry ?  customElementRegistry[tagName] : tagName;
+  return (initial, ...args) => tagFN(tagName, initial, ...args);
+}
+
+function ucFirst([first, ...theRest]) { return `${first.toUpperCase()}${theRest.join(``)}`; }
+
+function toDashedNotation(str2Convert) {
+  return str2Convert.replace(/[A-Z]/g, a => `-${a.toLowerCase()}`).replace(/^-|-$/, ``);
+}
+
+function toCamelcase(str2Convert) {
+  return str2Convert[Symbol.is](String)
+    ? str2Convert.toLowerCase()
+      .split(`-`)
+      .map( (str, i) => i && `${ucFirst(str)}` || str)
+      .join(``)
+    : str2Convert;
+}
