@@ -1,4 +1,4 @@
-import { maybe, addSymbolicExtensions, xProxy } from "https://unpkg.com/typeofanything@latest/Dist/toa.min.js";
+import { maybe, addSymbolicExtensions } from "https://unpkg.com/typeofanything@latest/Dist/toa.min.js";
 const converts = { html: `innerHTML`, text: `textContent`,  class: `className` };
 let elementFunctionCollection = {};
 let error = tag => {
@@ -6,7 +6,6 @@ let error = tag => {
   return undefined;
 };
 
-xProxy.custom();
 addSymbolicExtensions();
 
 export default tinyDOM();
