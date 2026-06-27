@@ -40,7 +40,8 @@ function getProxy() {
 function validateCustomElementTag(tagName) {
   return typeof tagName === `string` &&
     tagName.length > 2 &&
-    /[_a-zA-Z]/gi.test(tagName) &&
+    /^[a-z]/i.test(tagName) &&
+    /[_a-z0-9]/gi.test(tagName) &&
     (tagName.includes(`-`) || /([a-z][A-Z])+/.test(tagName));
 }
 
