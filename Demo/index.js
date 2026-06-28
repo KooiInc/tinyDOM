@@ -107,7 +107,7 @@ function demo() {
             `//                         ^  this automagically also registers ` +
             `$T.copyrightSlotted\n` +
             `// [...]\n` +
-            `copyrightComponent(...); // or $T.copyrightSlotted(...)\n`)
+            `copyrightComponent(...); // OR $T.copyrightSlotted(...)\n`)
           )
         )
       ),
