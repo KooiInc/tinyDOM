@@ -11,8 +11,10 @@ function demo() {
   // imported with
   // import $T from "../tinyDOM.js";
   // ------------------------------------------------
-  // trigger an error in the console (default error function)
+  // trigger an error in the console (default error function, see console after page load)
   $T.iAmNotReal("Or Am I?");
+  $T["i_am_not_real"]("Or Am I?");
+  $T["i2amNot4real"]("Or Am I?");
   
   // create custom error function for invalid tagNames
   $T.setError = key => $T.span(
@@ -85,27 +87,30 @@ function demo() {
         revealCodeLink("example code")
       ),
       $T.div("(Autonomous) <i>custom elements</i> can also be used. \
-        They have to be registered with a setter called <code>newCustomElement</code> ",
-        "The top bar of this demonstration " +
-        "page is a small web component: <code>&lt;copyright-slotted&gt;</code>. " +
+        Once initialized an autonomous custom element can be invoked using \
+        both ",
+        $T.a({
+          href: "https://basicfreetools.com/blog/text-case-conventions-explained/",
+          target: "_blank",
+          textContent: "snake- or camel case"
+        }),
+        ` function names, so either `, CODE(`$T["my-element"]`),
+        ` or `, CODE(`$T.myElement`),
+        ". The top bar of this demonstration " +
+        "page is a small web component with custom tag name " +
+        "<code>&lt;copyright-slotted&gt;</code>. " +
         "It is created using ",
         DIV(
           {class: `codeBlock`},
           $T.code(toCodeWithMaybeCommentSpan(
-            `$T.newCustomElement = "copyright-slotted";\n` +
-            `// OR $T.newCustomElement = "copyrightSlotted";\n` +
-            `$T["copyright-slotted"](...);`))
-          ),
-        `The setter takes either a `,
-        $T.a({
-          href: "https://basicfreetools.com/blog/text-case-conventions-explained/",
-          target: "_blank",
-          textContent: "snake- or camel cased"
-        }),
-        ` string value.`),
-        DIV(`Setting a (valid) value will result in the availability of two tag functions.
-          In case of the top bar component:
-          <code>$T["copyright-slotted"]</code> and <code>$T.copyrightSlotted</code>.`),
+            `const copyrightComponent = $T["copyright-slotted"];\n` +
+            `//                         ^  this automagically also registers ` +
+            `$T.copyrightSlotted\n` +
+            `// [...]\n` +
+            `copyrightComponent(...); // or $T.copyrightSlotted(...)\n`)
+          )
+        )
+      ),
       DIV("The library uses a ", CODE("Proxy"),
         ", so every tag function is <i>lazy loaded</i> (on demand)."),
       DIV("The library is included an used in ", jqlLink, $T.SPAN(` (a jQuery alike module).`) ),
@@ -189,7 +194,6 @@ function createCodeDetails() {
    document.body.insertAdjacentHTML(`afterbegin`, myElement.outerHTML);
  */
 function createCopyrightComponent() {
-  $T.newCustomElement = `copyrightSlotted`;
   CreateComponent( { componentName: `copyright-slotted`, onConnect: copyrightComponentConnectHandler });
   renderCopyrightComponent();
 }
@@ -200,9 +204,10 @@ function renderCopyrightComponent() {
       href: `//github.com/KooiInc/tinyDOM`,
       target: `_top`,
       text: ` Back to repository`});
+  const copyrightComponent = $T['copyright-slotted'];
   document.body.insertAdjacentElement(
     `beforeend`,
-    $T.copyrightSlotted(
+    copyrightComponent(
       $T.span({slot: `year`, text: String(new Date().getFullYear())}),
       ghLink,
     )
