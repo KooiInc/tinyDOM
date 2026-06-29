@@ -119,10 +119,11 @@ function demo() {
       DIV({text: "Enjoy!"})
     );
   
-  // the elements until now only exists in memory
-  // so, let's prepend them to the body of the DOM tree
+  // the elements until now only exist in memory
+  // so, let's prepend all we have to the document body
+  // see console/Elements for the resulting DOM tree
   document.body.prepend(
-    // a comment (see console/Elements)
+    // a comment
     $T.comment(`hello, this is a comment`),
     DIV(
       {class: "container"},
