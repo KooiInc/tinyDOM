@@ -66,7 +66,8 @@ function demo() {
           $T.CODE("const {p, P} = $T; p('hello world')"),
           " => ", printHTML(p("hello world")) ),
       ),
-      DIV("<b>A tag function</b> is <i>case insensitive</i> (so ",
+      DIV("<b>Tag functions</b> are <i>lazy loaded</i> (on demand, only when used) " +
+        "- the module uses a ", CODE("Proxy"), ". They are <i>case insensitive</i> (so ",
         CODE("$T.DIV"), " / ", CODE("$T.div"), " / ", CODE("$T.diV"), " are equal)."),
       DIV("<b>Properties</b> for a HTML element (e.g. ",
         CODE("class"), " or ", CODE("id"), ") can be passed in an object as the\
@@ -107,11 +108,9 @@ function demo() {
         in the console. Use the setter ",
         "<code>$T.setError = function([key]) {return ...})</code>",
         " for that. See ", CODE("NOTHING()"), " in the ",
-        revealCodeLink("example code")
+        revealCodeLink("example code"), `.`
       ),
-      DIV("The library uses a ", CODE("Proxy"),
-        ", so every tag function is <i>lazy loaded</i> (on demand)."),
-      DIV("The library is included an used in ", jqlLink, $T.SPAN(` (a jQuery alike module).`) ),
+      DIV("The module is included and used in ", jqlLink, $T.SPAN(` (a jQuery alike module).`) ),
       DIV("This document is completely created using the tinyDOM library (use CTRL+U to " +
         "see the HTML source of the original document).") ,
       DIV({text: "Enjoy!"})
