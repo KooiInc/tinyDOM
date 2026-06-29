@@ -35,12 +35,10 @@ function demo() {
   });
   const aboutContent =
     DIV(
-      DIV("(", revealCodeLink("Click here"),
-        " to reveal the code used to create the html in this demonstration page)"),
-      DIV("This small <i>library</i> offers a way to dynamically create (nested) HTML elements\
+      DIV("This small <i>module</i> offers a way to dynamically create (nested) HTML elements\
          by converting tag names (<code>div</code> <code>table</code> etc.)\
          to element creation functions ('", I("tag functions"), "')."),
-      DIV("Some examples (the default module export was imported as ", CODE("$T"), ")"),
+      DIV("<b>Some examples</b> (the default module export was imported as ", CODE("$T"), ")"),
       $T.UL(
         $T.li($T.code("$T.div('Hello world')"),
           " => ", printHTML($T.div("Hello world")) ),
@@ -68,25 +66,15 @@ function demo() {
           $T.CODE("const {p, P} = $T; p('hello world')"),
           " => ", printHTML(p("hello world")) ),
       ),
-      DIV("A tag function is <i>case insensitive</i> (so ",
+      DIV("<b>A tag function</b> is <i>case insensitive</i> (so ",
         CODE("$T.DIV"), " / ", CODE("$T.div"), " / ", CODE("$T.diV"), " are equal)."),
-      DIV("Properties for a HTML element (e.g. ",
+      DIV("<b>Properties</b> for a HTML element (e.g. ",
         CODE("class"), " or ", CODE("id"), ") can be passed in an object as the\
           first argument of the tag function. Everything from the next argument(s) is nested\
           within the created element. It may be strings, other HTML elements\
           created plainly or using tinyDOM tag functions.\
           Strings can be plain text or HTML."),
-      DIV("Invalid tagnames will be converted to a function returning nothing \
-        (<code>undefined</code>) \
-        by default, whilst reporting an error message in the console. \
-        The 'error'-function may be re-assigned, e.g. to a function returning\
-        an element containing an error message, or a function reporting an error\
-        in the console. Use the setter ",
-        "<code>$T.setError = function([key]) {return ...})</code>",
-        " for that. See ", CODE("NOTHING()"), " in the ",
-        revealCodeLink("example code")
-      ),
-      $T.div("(Autonomous) <i>custom elements</i> can also be used. \
+      $T.div("<b>Autonomous <i>custom elements</i></b> can also be used. \
         Once initialized an autonomous custom element can be invoked using \
         both ",
         $T.a({
@@ -111,6 +99,16 @@ function demo() {
           )
         )
       ),
+      DIV("<b>Invalid tagnames</b> will be converted to a function returning nothing \
+        (<code>undefined</code>) \
+        by default, whilst reporting an error message in the console. \
+        The 'error'-function may be re-assigned, e.g. to a function returning\
+        an element containing an error message, or a function reporting an error\
+        in the console. Use the setter ",
+        "<code>$T.setError = function([key]) {return ...})</code>",
+        " for that. See ", CODE("NOTHING()"), " in the ",
+        revealCodeLink("example code")
+      ),
       DIV("The library uses a ", CODE("Proxy"),
         ", so every tag function is <i>lazy loaded</i> (on demand)."),
       DIV("The library is included an used in ", jqlLink, $T.SPAN(` (a jQuery alike module).`) ),
@@ -134,7 +132,7 @@ function demo() {
         ),
         DIV(
           {id: "NameDiv"},
-          H3({data: {name: "Mary POC Demo"}}),
+          H3({data: {name: "Mary with your little lamb"}}),
           P("How are ", I(B("you")), " today?"),
           DIV("After rewriting the error function using <code>$T.setError</code>, ",
             $T.br(), "let's check this NOTHING tag function (", CODE("NOTHING()"),
