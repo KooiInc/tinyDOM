@@ -52,9 +52,10 @@ function demo() {
         $T.li(
           $T.div({class: `noMargin`}, "Include attributes that are not reflected " +
             "(can't be set using [element][attribute] = \"...\")"),
-          $T.code(`$T.div({attributes: {is: "my-customized-ul"}}, "hello WRLD")`), ` =>`,
+          $T.code(`$T.ul({attributes: {is: "my-customized-ul"}}, $T.li("hello WRLD"))`), ` =>`,
           $T.br(),
-          printHTML($T.div({attributes: {is: "my-customized-ul"}}, "hello WRLD"))),
+          printHTML($T.ul({attributes: {is: "my-customized-ul"}}, $T.li("hello WRLD")))
+        ),
         
         $T.li($T.code("$T.span({text: 'Hello world'})"),
           " => ", printHTML($T.span({text: 'Hello world'})) ),
@@ -66,15 +67,18 @@ function demo() {
           $T.CODE("const {p, P} = $T; p('hello world')"),
           " => ", printHTML(p("hello world")) ),
       ),
+      
       DIV("<b>Tag functions</b> are <i>lazy loaded</i> (on demand, only when used) " +
         "- the module uses a ", CODE("Proxy"), ". They are <i>case insensitive</i> (so ",
         CODE("$T.DIV"), " / ", CODE("$T.div"), " / ", CODE("$T.diV"), " are equal)."),
+      
       DIV("<b>Properties</b> for a HTML element (e.g. ",
         CODE("class"), " or ", CODE("id"), ") can be passed in an object as the\
           first argument of the tag function. Everything from the next argument(s) is nested\
           within the created element. It may be strings, other HTML elements\
           created plainly or using tinyDOM tag functions.\
           Strings can be plain text or HTML."),
+      
       $T.div("<b>Autonomous <i>custom elements</i></b> can also be used. \
         Once initialized an autonomous custom element can be invoked using \
         both ",
@@ -100,6 +104,7 @@ function demo() {
           )
         )
       ),
+      
       DIV("<b>Invalid tagnames</b> will be converted to a function returning nothing \
         (<code>undefined</code>) \
         by default, whilst reporting an error message in the console. \
@@ -110,9 +115,12 @@ function demo() {
         " for that. See ", CODE("NOTHING()"), " in the ",
         revealCodeLink("example code"), `.`
       ),
+      
       DIV("The module is included and used in ", jqlLink, $T.SPAN(` (a jQuery alike module).`) ),
+      
       DIV("This document is completely created using the tinyDOM library (use CTRL+U to " +
         "see the HTML source of the original document).") ,
+      
       DIV({text: "Enjoy!"})
     );
   
