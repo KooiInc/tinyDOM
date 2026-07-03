@@ -16,6 +16,16 @@
       color: red;
     }
 
+    .boxLeftRadius {
+      border-radius: 8px 0 0 8px;
+      box-shadow: -2px 2px 12px #999;
+      border: 1px dotted #999;
+    }
+
+    .solidBorder {
+      border-style: solid;
+    }
+
     .comment {
       color: #999;
     }
@@ -37,25 +47,12 @@
         margin: 0.8rem 0;
         line-height: 18px;
 
-        &.codeCenter {
-          margin: 0.2em 0;
-          text-align: center;
-          border: 1px dotted #999;
-          padding: 5px;
-          background-color: hsl(210, 8%, 90%);
-        }
-
         &.codeBlock {
-          margin: 0.5em 0;
+          margin: 1em 0;
           text-align: left;
-          border: 1px dotted #999;
           padding: 5px 15px;
           white-space: break-spaces;
           background-color: hsl(210, 8%, 90%);
-        }
-
-        &.noMargin {
-          margin: 0.2em 0;
         }
       }
 
@@ -121,7 +118,6 @@
         font-style: italic;
       }
 
-      border: 1px solid green;
       padding: 1rem;
       text-align: center;
     }
@@ -132,6 +128,10 @@
       padding: 0 1px;
       display: inline-block;
       border-radius: 4px;
+      &.noRadius {
+        border-radius: unset;
+      }
     }
+
   }
 }

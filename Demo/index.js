@@ -94,7 +94,7 @@ function demo() {
         "<code>&lt;copyright-slotted&gt;</code>. " +
         "It is created using ",
         DIV(
-          {class: `codeBlock`},
+          {class: `codeBlock,boxLeftRadius`},
           $T.code(toCodeWithMaybeCommentSpan(
             `const copyrightComponent = $T["copyright-slotted"];\n` +
             `//                         ^  this automagically also registers ` +
@@ -138,7 +138,7 @@ function demo() {
           aboutContent
         ),
         DIV(
-          {id: "NameDiv"},
+          {id: "NameDiv", class: "boxLeftRadius solidBorder"},
           H3({data: {name: "Mary with your little lamb"}}),
           P("How are ", I(B("you")), " today?"),
           DIV("After rewriting the error function using <code>$T.setError</code>, ",
