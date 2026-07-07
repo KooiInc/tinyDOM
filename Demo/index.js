@@ -1,5 +1,5 @@
 import {default as CreateComponent, createOrRetrieveShadowRoot} from "./es-webcomponent-bundle.js";
-import $T from "../tinyDOM.js";
+import $T from "../Src/tinyDOM.js";
 addHandler();
 demo();
 createCodeDetails();
