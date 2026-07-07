@@ -1,3 +1,4 @@
+[![](https://deno.bundlejs.com/?q=tinydom-es@latest&badge)](https://bundlejs.com/?q=tinydom-es)
 [![](https://img.shields.io/npm/v/tinydom-es.svg?labelColor=cb3837&logo=npm&color=dcfdd9)](https://www.npmjs.com/package/tinydom-es)
 
 ## tinyDOM
