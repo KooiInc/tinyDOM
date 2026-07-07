@@ -1,5 +1,5 @@
 import {default as CreateComponent, createOrRetrieveShadowRoot} from "./es-webcomponent-bundle.js";
-import $T from "../Src/tinyDOM.js";
+import $T from "../Bundle/tinyDOM.min.js";
 addHandler();
 demo();
 createCodeDetails();
@@ -8,9 +8,9 @@ $T.img({src: "https://sdn.nicon.nl/px0_git-tinyDOM-demo.png"});
 window.$T = $T;
 
 function demo() {
-  // ----------------------------------------------------
-  //  imported using import $T from "../Src/tinyDOM.js";
-  // ----------------------------------------------------
+  // -----------------------------------------------------------
+  //  imported using import $T from "../Bundle/tinyDOM.min.js";
+  // -----------------------------------------------------------
   // trigger an error in the console (default error function, see console after page load)
   $T.iAmNotReal("Or Am I?");
   $T["i_am_not_real"]("Or Am I?");
