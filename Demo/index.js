@@ -8,9 +8,9 @@ $T.img({src: "https://sdn.nicon.nl/px0_git-tinyDOM-demo.png"});
 window.$T = $T;
 
 function demo() {
-  // imported with
-  // import $T from "../tinyDOM.js";
-  // ------------------------------------------------
+  // ----------------------------------------------------
+  //  imported using import $T from "../Src/tinyDOM.js";
+  // ----------------------------------------------------
   // trigger an error in the console (default error function, see console after page load)
   $T.iAmNotReal("Or Am I?");
   $T["i_am_not_real"]("Or Am I?");
