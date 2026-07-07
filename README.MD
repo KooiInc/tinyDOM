@@ -5,7 +5,7 @@
 
 ### Create HTML elements using the element/tag name as a function
 
-This small *library* offers a way to dynamically create HTML elements
+This small module offers a way to dynamically create HTML elements
 using tag names as functions.
 
 ### Details
