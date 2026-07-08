@@ -76,7 +76,7 @@ function cloneExact() {
 }
 
 function processNext(root, next, tagName) {
-  next = next?.isJQx && next.node || checkType(next, `Number`) ? String(next) : next;
+  next = next?.isJQx && next.node || checkType(next, Number) ? String(next) : next;
   
   return maybe({
     trial: _ => containsHTML(next) ? root.insertAdjacentHTML(`beforeend`, next) : root.append(next),
@@ -94,7 +94,7 @@ function retrieveElementFromInitial(initial, tag) {
   initial = isComment(tag) ? cleanupComment(initial) : initial?.isJQx ? initial.node : initial;
   
   switch(true) {
-    case checkType(initial, `String`): return createElement(tag, containsHTML(initial, tag) ? {html: initial} : {text: initial});
+    case checkType(initial, String): return createElement(tag, containsHTML(initial, tag) ? {html: initial} : {text: initial});
     case initial instanceof Node: return createElementAndAppend(tag, initial);
     default: return createElement(tag, initial);
   }
@@ -118,7 +118,7 @@ function cleanupProps(props) {
 }
 
 function retrieveSpecialProps(props) {
-  props = checkType(props, `object`) && props || undefined;
+  props = checkType(props, Object) && props || undefined;
   
   if (!props) { return Array(3); }
   
@@ -152,16 +152,12 @@ function createElement(tagName, props) {
   return elem;
 }
 
-function checkType(obj, type2Check) {
-  return Object.prototype.toString.call(obj).toLowerCase() === `[object ${type2Check}]`.toLowerCase();
-}
-
 function cleanupComment(initial) {
   return initial?.constructor === Comment ? initial?.textContent : String(initial);
 }
 
 function containsHTML(str, tag) {
-  return !isComment(tag) && checkType(str, `string`) && /<.*>|&[#|0-9a-z]+[^;];/i.test(str);
+  return !isComment(tag) && checkType(str, String) && /<.*>|&[#|0-9a-z]+[^;];/i.test(str);
 }
 
 function isComment(tag) { return /comment/i.test(tag); }
@@ -169,7 +165,7 @@ function isComment(tag) { return /comment/i.test(tag); }
 function validateTag(name) {
   return validateElementTagName(name) &&
     (name in customElementRegistry ||
-      !checkType(createElement(name), `HTMLUnknownElement`));
+      !checkType(createElement(name), HTMLUnknownElement));
 }
 
 function validateElementTagName(tagName) {
@@ -193,7 +189,7 @@ function toDashedNotation(str2Convert) {
 }
 
 function toCamelcase(str2Convert) {
-  return checkType(str2Convert, `string`)
+  return checkType(str2Convert, String)
     ? str2Convert.toLowerCase()
       .split(`-`)
       .map( (str, i) => i && `${ucFirst(str)}` || str)
@@ -206,4 +202,13 @@ function maybeFactory() {
   return function({trial, whenError = errFn } = {}) {
     try { return trial(); } catch (err) { return whenError(err); }
   };
+}
+
+function checkType(obj, type2Check) {
+  return Object.prototype.toString.call(obj).toLowerCase() === `[object ${ctor2String(type2Check)}]`.toLowerCase();
+}
+
+function ctor2String(type2Check) {
+  let ctorStringified = String(type2Check);
+  return ctorStringified.slice(ctorStringified.indexOf(` `) + 1, ctorStringified.indexOf(`(`));
 }
