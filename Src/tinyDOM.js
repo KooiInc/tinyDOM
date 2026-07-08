@@ -1,13 +1,11 @@
-import { maybe, addSymbolicExtensions } from "./toa.min.js";
 const converts = { html: `innerHTML`, text: `textContent`,  class: `className` };
+const maybe = maybeFactory();
 let elementFunctionCollection = {};
 const customElementRegistry = {};
 let tagFunctionError = tag => {
   console.error(`tinyDOM error: "${tag}" is not a valid HTML tag`);
   return undefined;
 };
-
-addSymbolicExtensions();
 
 export default tinyDOM();
 
@@ -78,7 +76,7 @@ function cloneExact() {
 }
 
 function processNext(root, next, tagName) {
-  next = next?.isJQx && next.node || (next?.[Symbol.is](Number) ? String(next) : next);
+  next = next?.isJQx && next.node || checkType(next, `Number`) ? String(next) : next;
   
   return maybe({
     trial: _ => containsHTML(next) ? root.insertAdjacentHTML(`beforeend`, next) : root.append(next),
@@ -96,8 +94,8 @@ function retrieveElementFromInitial(initial, tag) {
   initial = isComment(tag) ? cleanupComment(initial) : initial?.isJQx ? initial.node : initial;
   
   switch(true) {
-    case initial?.[Symbol.is](String): return createElement(tag, containsHTML(initial, tag) ? {html: initial} : {text: initial});
-    case initial?.[Symbol.is](Node): return createElementAndAppend(tag, initial);
+    case checkType(initial, `String`): return createElement(tag, containsHTML(initial, tag) ? {html: initial} : {text: initial});
+    case initial instanceof Node: return createElementAndAppend(tag, initial);
     default: return createElement(tag, initial);
   }
 }
@@ -120,7 +118,9 @@ function cleanupProps(props) {
 }
 
 function retrieveSpecialProps(props) {
-  if (!props?.[Symbol.is](Object)) { return Array(3); }
+  props = checkType(props, `object`) && props || undefined;
+  
+  if (!props) { return Array(3); }
   
   const data = Object.entries(props.data ?? {});
   const attributes = Object.entries(props.attributes ?? {});
@@ -152,13 +152,16 @@ function createElement(tagName, props) {
   return elem;
 }
 
+function checkType(obj, type2Check) {
+  return Object.prototype.toString.call(obj).toLowerCase() === `[object ${type2Check}]`.toLowerCase();
+}
 
 function cleanupComment(initial) {
   return initial?.constructor === Comment ? initial?.textContent : String(initial);
 }
 
 function containsHTML(str, tag) {
-  return !isComment(tag) && str?.[Symbol.is](String) && /<.*>|&[#|0-9a-z]+[^;];/i.test(str);
+  return !isComment(tag) && checkType(str, `string`) && /<.*>|&[#|0-9a-z]+[^;];/i.test(str);
 }
 
 function isComment(tag) { return /comment/i.test(tag); }
@@ -166,7 +169,7 @@ function isComment(tag) { return /comment/i.test(tag); }
 function validateTag(name) {
   return validateElementTagName(name) &&
     (name in customElementRegistry ||
-      !createElement(name)?.[Symbol.is](HTMLUnknownElement));
+      !checkType(createElement(name), `HTMLUnknownElement`));
 }
 
 function validateElementTagName(tagName) {
@@ -190,10 +193,17 @@ function toDashedNotation(str2Convert) {
 }
 
 function toCamelcase(str2Convert) {
-  return str2Convert[Symbol.is](String)
+  return checkType(str2Convert, `string`)
     ? str2Convert.toLowerCase()
       .split(`-`)
       .map( (str, i) => i && `${ucFirst(str)}` || str)
       .join(``)
     : str2Convert;
+}
+
+function maybeFactory() {
+  const errFn = err => undefined;
+  return function({trial, whenError = errFn } = {}) {
+    try { return trial(); } catch (err) { return whenError(err); }
+  };
 }
