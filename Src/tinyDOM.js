@@ -205,10 +205,12 @@ function maybeFactory() {
 }
 
 function checkType(obj, type2Check) {
+  if (type2Check === null || type2Check === undefined) { return false; }
+  
   return Object.prototype.toString.call(obj).toLowerCase() === `[object ${ctor2String(type2Check)}]`.toLowerCase();
 }
 
 function ctor2String(type2Check) {
-  let ctorStringified = String(type2Check);
+  let ctorStringified = type2Check instanceof Function ? String(type2Check) : `not a constructor`;
   return ctorStringified.slice(ctorStringified.indexOf(` `) + 1, ctorStringified.indexOf(`(`));
 }
