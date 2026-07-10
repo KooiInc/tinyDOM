@@ -2,6 +2,7 @@ const converts = { html: `innerHTML`, text: `textContent`,  class: `className` }
 const maybe = maybeFactory();
 let elementFunctionCollection = {};
 const customElementRegistry = {};
+const noCTOR = String(function NoCtor() {});
 let tagFunctionError = tag => {
   console.error(`tinyDOM error: "${tag}" is not a valid HTML tag`);
   return undefined;
@@ -211,6 +212,6 @@ function checkType(obj, type2Check) {
 }
 
 function ctor2String(type2Check) {
-  let ctorStringified = type2Check instanceof Function ? String(type2Check) : `fn NoCtor() {}`;
-  return /^.+ (?<typeName>.+)\(.*$/.exec(ctorStringified).groups.typeName;
+  let ctorStringified = type2Check instanceof Function ? String(type2Check) : noCTOR;
+  return /^function (?<typeName>.+)\(.*$/.exec(ctorStringified)?.groups?.typeName;
 }
