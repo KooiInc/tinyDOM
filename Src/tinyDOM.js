@@ -208,7 +208,7 @@ function maybeFactory() {
 function typeCheckFactory() {
   const noCTOR = String(function NoCtor() {});
   
-  return function checkType(obj, type2Check) {
+  return function (obj, type2Check) {
     return Object.prototype.toString.call(obj).toLowerCase() === `[object ${ctor2String(type2Check)}]`.toLowerCase();
   }
   
