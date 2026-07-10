@@ -211,6 +211,6 @@ function checkType(obj, type2Check) {
 }
 
 function ctor2String(type2Check) {
-  let ctorStringified = type2Check instanceof Function ? String(type2Check) : `not a constructor`;
-  return ctorStringified.slice(ctorStringified.indexOf(` `) + 1, ctorStringified.indexOf(`(`));
+  let ctorStringified = type2Check instanceof Function ? String(type2Check) : `fn NoCtor() {}`;
+  return /^.+ (?<typeName>.+)\(.*$/.exec(ctorStringified).groups.typeName;
 }
