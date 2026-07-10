@@ -207,9 +207,13 @@ function maybeFactory() {
 
 function typeCheckFactory() {
   const noCTOR = String(function NoCtor() {});
+  const collate = new Intl.Collator(`en`, {sensitivity: 'base'});
   
   return function (obj, type2Check) {
-    return Object.prototype.toString.call(obj).toLowerCase() === `[object ${ctor2String(type2Check)}]`.toLowerCase();
+    return 0 === collate.compare(
+      Object.prototype.toString.call(obj),
+      `[object ${ctor2String(type2Check)}]`
+    );
   }
   
   function ctor2String(type2Check) {
