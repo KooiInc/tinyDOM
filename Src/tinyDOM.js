@@ -2,7 +2,7 @@ const converts = { html: `innerHTML`, text: `textContent`,  class: `className` }
 const maybe = maybeFactory();
 let elementFunctionCollection = {};
 const customElementRegistry = {};
-const noCTOR = String(function NoCtor() {});
+const checkType = typeCheckFactory();
 let tagFunctionError = tag => {
   console.error(`tinyDOM error: "${tag}" is not a valid HTML tag`);
   return undefined;
@@ -205,11 +205,15 @@ function maybeFactory() {
   };
 }
 
-function checkType(obj, type2Check) {
-  return Object.prototype.toString.call(obj).toLowerCase() === `[object ${ctor2String(type2Check)}]`.toLowerCase();
-}
-
-function ctor2String(type2Check) {
-  let ctorStringified = type2Check instanceof Function ? String(type2Check) : noCTOR;
-  return /^function (?<typeName>.+)\(.*$/.exec(ctorStringified)?.groups?.typeName;
+function typeCheckFactory() {
+  const noCTOR = String(function NoCtor() {});
+  
+  return function checkType(obj, type2Check) {
+    return Object.prototype.toString.call(obj).toLowerCase() === `[object ${ctor2String(type2Check)}]`.toLowerCase();
+  }
+  
+  function ctor2String(type2Check) {
+    let ctorStringified = type2Check instanceof Function ? String(type2Check) : noCTOR;
+    return /^function (?<typeName>.+)\(.*$/.exec(ctorStringified)?.groups?.typeName;
+  }
 }
