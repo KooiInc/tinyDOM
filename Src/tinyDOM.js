@@ -206,8 +206,6 @@ function maybeFactory() {
 }
 
 function checkType(obj, type2Check) {
-  if (type2Check === null || type2Check === undefined) { return false; }
-  
   return Object.prototype.toString.call(obj).toLowerCase() === `[object ${ctor2String(type2Check)}]`.toLowerCase();
 }
 
