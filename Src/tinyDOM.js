@@ -206,18 +206,13 @@ function maybeFactory() {
 }
 
 function typeCheckFactory() {
-  const noCTOR = String(function NoCtor() {});
   const collate = new Intl.Collator(`en`, {sensitivity: 'base'});
+  const nameOf = type2Check => typeof type2Check === `function` ? type2Check.name : `noCTOR`;
   
   return function (obj, type2Check) {
     return 0 === collate.compare(
       Object.prototype.toString.call(obj),
-      `[object ${ctor2String(type2Check)}]`
-    );
-  }
-  
-  function ctor2String(type2Check) {
-    let ctorStringified = type2Check instanceof Function ? String(type2Check) : noCTOR;
-    return /^function (?<typeName>.+)\(.*$/.exec(ctorStringified)?.groups?.typeName;
+      `[object ${nameOf(type2Check)}]`
+    ) || obj?.name === type2Check?.name;
   }
 }
