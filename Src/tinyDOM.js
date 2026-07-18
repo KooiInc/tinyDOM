@@ -207,20 +207,22 @@ function maybeFactory() {
 
 function typeCheckFactory() {
   const collate = new Intl.Collator(`en`, {sensitivity: 'base'});
-  const nameOf = type2Check => typeof type2Check === `function`
-    ? type2Check?.name || type2Check?.constructor?.name : `noCTOR`;
+  const nameOf = type2Check => {
+    return typeof type2Check === `function` || typeof type2Check?.constructor === `function`
+      ? type2Check?.name || type2Check?.constructor?.name : `noCTOR`;
+  };
   
   function checkSingleType(obj, type2Check) {
     if (type2Check === Number && (Number.isNaN(obj) || !Number.isFinite(obj))) { return false; }
-    
     const [objName, typeName] = [nameOf(obj), nameOf(type2Check)];
     
-    return objName === typeName ||
+    return type2Check === obj.name ||
+      objName === typeName ||
       0 === collate.compare( Object.prototype.toString.call(obj), `[object ${typeName}]` );
   }
   
-  function checkType(obj, ...type2Check) {
-    if (type2Check.length > 1) {
+  return function checkType(obj, ...type2Check) {
+    if (Array.isArray(type2Check) && type2Check.length > 1) {
       for (const chkType of type2Check) {
         if (checkSingleType(obj, chkType)) { return true; }
       }
@@ -228,8 +230,6 @@ function typeCheckFactory() {
       return false;
     }
     
-    return checkSingleType(obj, type2Check?.shift());
+    return checkSingleType(obj, type2Check?.[0]);
   }
-  
-  return checkType;
 }
