@@ -216,7 +216,7 @@ function typeCheckFactory() {
     if (type2Check === Number && (Number.isNaN(obj) || !Number.isFinite(obj))) { return false; }
     const [objName, typeName] = [nameOf(obj), nameOf(type2Check)];
     
-    return type2Check === obj.name ||
+    return type2Check === obj?.name ||
       objName === typeName ||
       0 === collate.compare( Object.prototype.toString.call(obj), `[object ${typeName}]` );
   }
